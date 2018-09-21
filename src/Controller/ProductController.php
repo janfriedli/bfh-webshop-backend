@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
@@ -34,6 +35,10 @@ class ProductController extends FOSRestController
     public function getProduct(int $productId): View
     {
         $product = $this->productService->getProduct($productId);
+        if (!$product) {
+            throw new EntityNotFoundException('Product with id '.$productId.' does not exist!');
+        }
+
         return View::create($product, Response::HTTP_OK);
     }
     
@@ -57,6 +62,10 @@ class ProductController extends FOSRestController
     public function postProduct(Request $request): View
     {
         $product = $this->productService->addProduct($request->get('title'), $request->get('description'));
+        if (!$product) {
+            throw new EntityNotFoundException('Product with id '.$productId.' does not exist!');
+        }
+
         return View::create($product, Response::HTTP_CREATED);
     }
 
@@ -70,6 +79,10 @@ class ProductController extends FOSRestController
     public function putProduct(int $productId, Request $request): View
     {
         $product = $this->productService->updateProduct($productId, $request->get('title'), $request->get('description'));
+        if (!$product) {
+            throw new EntityNotFoundException('Product with id '.$productId.' does not exist!');
+        }
+
         return View::create($product, Response::HTTP_OK);
     }
 
@@ -78,6 +91,7 @@ class ProductController extends FOSRestController
      * @Rest\Delete("/product/{productId}")
      * @param int $productId
      * @return View
+     * @throws \Doctrine\ORM\ORMException
      */
     public function deleteProduct(int $productId): View
     {

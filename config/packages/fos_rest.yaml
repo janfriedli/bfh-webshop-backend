@@ -7,3 +7,13 @@ fos_rest:
   param_fetcher_listener:  true
   allowed_methods_listener:  true
   routing_loader: true
+  exception:
+    exception_controller: 'fos_rest.exception.controller:showAction'
+    codes:
+      Doctrine\ORM\EntityNotFoundException: 404
+      \LogicException: 400
+      \DomainException: 400
+    messages:
+      Doctrine\ORM\EntityNotFoundException: true
+      \LogicException: true
+      \DomainException: true
