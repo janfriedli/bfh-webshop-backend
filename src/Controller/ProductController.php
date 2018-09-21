@@ -31,6 +31,7 @@ class ProductController extends FOSRestController
      * @Rest\Get("/product/{productId}")
      * @param int $productId
      * @return View
+     * @throws \Doctrine\ORM\ORMException
      */
     public function getProduct(int $productId): View
     {
@@ -62,10 +63,6 @@ class ProductController extends FOSRestController
     public function postProduct(Request $request): View
     {
         $product = $this->productService->addProduct($request->get('title'), $request->get('description'));
-        if (!$product) {
-            throw new EntityNotFoundException('Product with id '.$productId.' does not exist!');
-        }
-
         return View::create($product, Response::HTTP_CREATED);
     }
 
