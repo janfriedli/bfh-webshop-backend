@@ -26,7 +26,7 @@ final class ProductService
      */
     public function getProduct(int $productId): ?Product
     {
-        return $this->productRepository->findById($productId);
+        return $this->productRepository->findOneById($productId);
     }
 
     /**
@@ -72,6 +72,7 @@ final class ProductService
 
     /**
      * @param int $productId
+     * @throws \Doctrine\ORM\ORMException
      */
     public function deleteProduct(int $productId): void
     {

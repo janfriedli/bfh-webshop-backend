@@ -26,6 +26,18 @@ class ProductController extends FOSRestController
     }
 
     /**
+     * Retrieves an Product resource
+     * @Rest\Get("/product/{productId}")
+     * @param int $productId
+     * @return View
+     */
+    public function getProduct(int $productId): View
+    {
+        $product = $this->productService->getProduct($productId);
+        return View::create($product, Response::HTTP_OK);
+    }
+    
+    /**
      * Gets the complete product list
      * @Rest\Get("/product")
      * @param Request $request
