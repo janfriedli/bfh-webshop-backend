@@ -14,37 +14,26 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
  */
 class ProductRepository extends ServiceEntityRepository
 {
+    /**
+     * ProductRepository constructor.
+     * @param RegistryInterface $registry
+     */
     public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, Product::class);
     }
 
-//    /**
-//     * @return Product[] Returns an array of Product objects
-//     */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+    /**
+     * Persist a product
+     * @param Product $product
+     * @throws \Doctrine\ORM\ORMException
+     * @return Product
+     */
+    public function save(Product $product) {
+        $this->getEntityManager()->persist($product);
+        $this->getEntityManager()->flush($product);
+        $this->getEntityManager()->refresh($product);
 
-    /*
-    public function findOneBySomeField($value): ?Product
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return $product;
     }
-    */
 }

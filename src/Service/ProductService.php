@@ -40,6 +40,7 @@ final class ProductService
     /**
      * @param string $title
      * @param string $content
+     * @throws \Doctrine\ORM\ORMException
      * @return Product
      */
     public function addProduct(string $title, string $content): Product
@@ -47,7 +48,7 @@ final class ProductService
         $product = new Product();
         $product->setTitle($title);
         $product->setDescription($content);
-        $this->productRepository->save($product);
+        $product = $this->productRepository->save($product);
         return $product;
     }
 
@@ -55,6 +56,7 @@ final class ProductService
      * @param int $productId
      * @param string $title
      * @param string $content
+     * @throws \Doctrine\ORM\ORMException
      * @return null|Product
      */
     public function updateProduct(int $productId, string $title, string $content): ?Product
@@ -65,8 +67,7 @@ final class ProductService
         }
         $product->setTitle($title);
         $product->setDescription($content);
-        $this->productRepository->save($product);
-        return $product;
+        return $this->productRepository->save($product);
     }
 
     /**

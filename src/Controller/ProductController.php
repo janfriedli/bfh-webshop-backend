@@ -34,4 +34,14 @@ class ProductController extends FOSRestController
     public function productList(Request $request): View {
         return View::create($this->productService->getAllProducts(), Response::HTTP_OK);
     }
+
+    /**
+     * Creates an Product resource
+     * @Rest\Post("/product")
+     */
+    public function postProduct(Request $request): View
+    {
+        $product = $this->productService->addProduct($request->get('title'), $request->get('description'));
+        return View::create($product, Response::HTTP_CREATED);
+    }
 }
