@@ -5,19 +5,33 @@ namespace App\Controller;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\View\View;
+use App\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 class ProductController extends FOSRestController
 {
     /**
-     * Creates an Article resource
-     * @Rest\Get("/ping")
+     * @var ProductService 
+     */
+    private $productService;
+
+    /**
+     * ProductController constructor.
+     * @param ProductService $productService
+     */
+    public function __construct(ProductService $productService)
+    {
+        $this->productService= $productService;
+    }
+
+    /**
+     * Gets the complete product list
+     * @Rest\Get("/product")
      * @param Request $request
      * @return View
      */
-    public function ping(Request $request): View
-    {
-        return View::create(['test' => 'pong'], Response::HTTP_OK);
+    public function productList(Request $request): View {
+        return View::create($this->productService->getAllProducts(), Response::HTTP_OK);
     }
 }
