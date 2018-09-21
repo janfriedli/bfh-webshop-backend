@@ -36,4 +36,13 @@ class ProductRepository extends ServiceEntityRepository
 
         return $product;
     }
+
+    /**
+     * @param Product $product
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function delete(Product $product) {
+        $this->getEntityManager()->remove($product);
+        $this->getEntityManager()->flush($product);
+    }
 }

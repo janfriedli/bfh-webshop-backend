@@ -60,4 +60,16 @@ class ProductController extends FOSRestController
         $product = $this->productService->updateProduct($productId, $request->get('title'), $request->get('description'));
         return View::create($product, Response::HTTP_OK);
     }
+
+    /**
+     * Removes a Product resource
+     * @Rest\Delete("/product/{productId}")
+     * @param int $productId
+     * @return View
+     */
+    public function deleteProduct(int $productId): View
+    {
+        $this->productService->deleteProduct($productId);
+        return View::create([], Response::HTTP_NO_CONTENT);
+    }
 }
