@@ -55,18 +55,18 @@ final class ProductService
     /**
      * @param int $productId
      * @param string $title
-     * @param string $content
+     * @param string $description
      * @throws \Doctrine\ORM\ORMException
      * @return null|Product
      */
-    public function updateProduct(int $productId, string $title, string $content): ?Product
+    public function updateProduct(int $productId, string $title, string $description): ?Product
     {
-        $product = $this->productRepository->findById($productId);
+        $product = $this->productRepository->findOneById($productId);
         if (!$product) {
             return null;
         }
         $product->setTitle($title);
-        $product->setDescription($content);
+        $product->setDescription($description);
         return $this->productRepository->save($product);
     }
 
@@ -75,7 +75,7 @@ final class ProductService
      */
     public function deleteProduct(int $productId): void
     {
-        $product = $this->productRepository->findById($productId);
+        $product = $this->productRepository->findOneById($productId);
         if ($product) {
             $this->productRepository->delete($product);
         }
