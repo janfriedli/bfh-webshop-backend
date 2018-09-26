@@ -38,16 +38,12 @@ final class ProductService
     }
 
     /**
-     * @param string $title
-     * @param string $content
+     * @param Product $product
      * @throws \Doctrine\ORM\ORMException
      * @return Product
      */
-    public function addProduct(string $title, string $content): Product
+    public function addProduct(Product $product): Product
     {
-        $product = new Product();
-        $product->setTitle($title);
-        $product->setDescription($content);
         $product = $this->productRepository->save($product);
         return $product;
     }

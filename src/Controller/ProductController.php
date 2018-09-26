@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Product;
 use Doctrine\ORM\EntityNotFoundException;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
@@ -9,6 +10,12 @@ use FOS\RestBundle\View\View;
 use App\Service\ProductService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use App\Exception\ValidationException;
+
 
 class ProductController extends FOSRestController
 {
@@ -55,14 +62,21 @@ class ProductController extends FOSRestController
 
     /**
      * Creates an Product resource
-     * @param Request $request
+     * @param Product $product
+     * @param ConstraintViolationListInterface $validationErrors
+     * @ParamConverter("product", converter="fos_rest.request_body")
      * @Rest\Post("/product")
      * @return View
      * @throws \Doctrine\ORM\ORMException
      */
-    public function postProduct(Request $request): View
+    public function postProduct(Product $product, ConstraintViolationListInterface $validationErrors): View
     {
-        $product = $this->productService->addProduct($request->get('title'), $request->get('description'));
+
+        if (count($validationErrors) > 0) {
+            return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $product = $this->productService->addProduct($product);
         return View::create($product, Response::HTTP_CREATED);
     }
 
