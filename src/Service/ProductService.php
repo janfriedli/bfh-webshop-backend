@@ -50,20 +50,18 @@ final class ProductService
 
     /**
      * @param int $productId
-     * @param string $title
-     * @param string $description
+     * @param Product $updatedProduct
      * @throws \Doctrine\ORM\ORMException
      * @return null|Product
      */
-    public function updateProduct(int $productId, string $title, string $description): ?Product
+    public function updateProduct(int $productId, $updatedProduct): ?Product
     {
         $product = $this->productRepository->findOneById($productId);
         if (!$product) {
             return null;
         }
-        $product->setTitle($title);
-        $product->setDescription($description);
-        return $this->productRepository->save($product);
+
+        return $this->productRepository->update($productId, $updatedProduct);
     }
 
     /**

@@ -71,7 +71,6 @@ class ProductController extends FOSRestController
      */
     public function postProduct(Product $product, ConstraintViolationListInterface $validationErrors): View
     {
-
         if (count($validationErrors) > 0) {
             return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
         }
@@ -83,18 +82,24 @@ class ProductController extends FOSRestController
     /**
      * @Rest\Put("/product/{productId}")
      * @param int $productId
-     * @param Request $request
+     * @param Product $product
+     * @param ConstraintViolationListInterface $validationErrors
+     * @ParamConverter("product", converter="fos_rest.request_body")
      * @return View
      * @throws \Doctrine\ORM\ORMException
      */
-    public function putProduct(int $productId, Request $request): View
+    public function putProduct(int $productId, Product $product, ConstraintViolationListInterface $validationErrors): View
     {
-        $product = $this->productService->updateProduct($productId, $request->get('title'), $request->get('description'));
-        if (!$product) {
+        if (count($validationErrors) > 0) {
+            return View::create($validationErrors, Response::HTTP_BAD_REQUEST);
+        }
+
+        $updatedProduct = $this->productService->updateProduct($productId, $product);
+        if (!$updatedProduct) {
             throw new EntityNotFoundException('Product with id '.$productId.' does not exist!');
         }
 
-        return View::create($product, Response::HTTP_OK);
+        return View::create($updatedProduct, Response::HTTP_OK);
     }
 
     /**

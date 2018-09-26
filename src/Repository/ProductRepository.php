@@ -5,6 +5,7 @@ namespace App\Repository;
 use App\Entity\Product;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @method Product|null find($id, $lockMode = null, $lockVersion = null)
@@ -44,5 +45,20 @@ class ProductRepository extends ServiceEntityRepository
     public function delete(Product $product) {
         $this->getEntityManager()->remove($product);
         $this->getEntityManager()->flush($product);
+    }
+
+    /**
+     * @param int $id
+     * @param Product $product
+     * @return object
+     * @throws \Doctrine\ORM\ORMException
+     */
+    public function update(int $id, Product $product) {
+        if ($id < 0) {
+            throw new BadRequestHttpException('The product id can\'t be lower than zero');
+        }
+
+        $product->setId($id);
+        return $this->getEntityManager()->merge($product);
     }
 }
