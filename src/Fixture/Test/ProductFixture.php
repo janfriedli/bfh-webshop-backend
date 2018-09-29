@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Test\Fixture;
+namespace App\Fixture\Test;
 
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -12,7 +12,7 @@ class ProductFixture extends Fixture
     {
         for ($i = 0; $i < 20; $i++) {
             $product = new Product();
-            $product->setTitle('product '.$i);
+            $product->setTitle('product'.$i);
             $product->setDescription('description'.$i);
             $manager->persist($product);
         }
