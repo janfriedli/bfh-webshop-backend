@@ -66,4 +66,46 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals('testTitle', $product->title);
         $this->assertEquals('testDescription', $product->description);
     }
+
+    /**
+     * POST a product with error
+     */
+    public function testPostProductValidation()
+    {
+        $this->loadFixtures();
+        $client = $this->makeClient();
+        $product = new \App\Entity\Product();
+        $product->setDescription('a description');
+        $productJson = '{
+            "title": "",
+            "description": "testDescription"
+        }';
+        $this->postProduct($productJson, $client);
+
+        $this->assertStatusCode(400, $client);
+        $error = json_decode($client->getResponse()->getContent());
+        //var_dump($error);die;
+        $this->assertEquals('title', $error->violations[0]->propertyPath);
+        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
+
+    }
+
+
+    /**
+     * POST a product
+     * @param string $body
+     * @param $client
+     */
+    private function postProduct(string $body, $client) {
+        $client->request(
+            'POST',
+            '/v1/product',
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            $body
+        );
+    }
+
+
 }
