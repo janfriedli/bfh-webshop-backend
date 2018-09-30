@@ -111,6 +111,32 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals('newDescription', $updatedProduct->description);
     }
 
+    /**
+     * PUT a product with validation errors
+     */
+    public function testPutProductValidation()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\ProductFixture'
+        ]);
+        $client = $this->makeClient();
+
+        $productJson = '{
+            "title": "",
+            "description": ""
+        }';
+
+        $this->putProduct(1, $productJson, $client);
+        $this->assertStatusCode(400, $client);
+
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(2, count($error->violations));
+        $this->assertEquals('title', $error->violations[0]->propertyPath);
+        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
+        $this->assertEquals('description', $error->violations[1]->propertyPath);
+        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
+    }
+
 
     /**
      * POST a product
