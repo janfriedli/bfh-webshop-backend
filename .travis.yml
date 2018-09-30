@@ -17,14 +17,6 @@ matrix:
    - php: nightly
  fast_finish: true
 
-deploy:
-  provider: heroku
-  api_key:
-    secure: kYxmrL90ylpD1K50LzYN+8jvKefcZdSBXyTkX+P565wvTXLgoaCVmRIHRq+KUQSPuGAkFqh2qAY8niinKE7T//0GwDVzZb6WuxomJ8iV5DStvmrt3hQvOdGRVWV6lA96blPqF6surlB9Ri6uwAGw4XEf4ssphKweQZJnsGDmufWXlLjfHe+gB7EB2nrq/umkHo/ZGCRWwIBpuTMLPiYuDjZv6vZ7KN3KPJsJWJLHHrO3VnP713WvLQhCO99pyiOQIhVxRXOMWuiXF72jQgUX6furHYxKYsxGTmTO4Z/2Kt/xQKoJXXUlh1qHXnfrVGX+4RS6WKbukaetMf/HR2IHn9aF2plWrT4Bb4cTxn/SNK6SGiRwhldCfCd9dALBSZSntNHiDIZCb9J97j+7dCjWwdhkWEwDVVvMAhRT5xS3TmuPfxzUaiwl3l6P0c0jrJSpmnpITHmbAl/X9la/mvdCRbIr/b6b/6sznx6AbgBdvUvPvvVvXF0qs/MX7e6jhTBaJL8ofYIaWS451BOONaufWp8f1Bh0GoudRneFDmRUKqjOvMcSvFnTG9NlSjlP2FaT9JczTa3l0PpE7+qJxeSEH9oItMN5Q/lkczozMoR7+oMimMCl/A0+7WyWU4tZYW0jYQ7ssCy6lkjpvokQn6+hx0xhC6eHjx0tgGMdesi41R0=
-  app: bfh-webshop-backend
-  on:
-    repo: janfriedli/bfh-webshop-backend
-
 notifications:
    on_success: never
    on_failure: always
