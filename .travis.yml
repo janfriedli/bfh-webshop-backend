@@ -1,6 +1,7 @@
 language: php
 php:
-  - '7.0'
+  - '7.1'
+  - '7.2'
   - nightly
 
 before_script:
@@ -15,7 +16,7 @@ script: phpunit
 # fast_finish: If your build fails do not continue trying to build, just stop.
 matrix:
  allow_failures:
-   - php: 5.6
+   - php: nightly
  fast_finish: true
 
 # Customize when the notification emails are sent.
