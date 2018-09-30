@@ -44,8 +44,6 @@ class ProductControllerTest extends WebTestCase
     {
         $this->loadFixtures();
         $client = $this->makeClient();
-        $product = new \App\Entity\Product();
-        $product->setDescription('a description');
         $productJson = '{
             "title": "testTitle",
             "description": "testDescription"
@@ -82,10 +80,35 @@ class ProductControllerTest extends WebTestCase
 
         $this->assertStatusCode(400, $client);
         $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(2, count($error->violations));
         $this->assertEquals('title', $error->violations[0]->propertyPath);
         $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
         $this->assertEquals('description', $error->violations[1]->propertyPath);
         $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
+    }
+
+    /**
+     * PUT a product
+     */
+    public function testPutProduct()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\ProductFixture'
+        ]);
+        $client = $this->makeClient();
+
+        $productJson = '{
+            "title": "newTitle",
+            "description": "newDescription"
+        }';
+
+        $this->putProduct(1, $productJson, $client);
+        $this->assertStatusCode(200, $client);
+
+        $updatedProduct = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(1, $updatedProduct->id);
+        $this->assertEquals('newTitle', $updatedProduct->title);
+        $this->assertEquals('newDescription', $updatedProduct->description);
     }
 
 
@@ -98,6 +121,23 @@ class ProductControllerTest extends WebTestCase
         $client->request(
             'POST',
             '/v1/product',
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            $body
+        );
+    }
+
+    /**
+     * PUT a product
+     * @param $id
+     * @param string $body
+     * @param $client
+     */
+    private function putProduct(int $id,string $body, $client) {
+        $client->request(
+            'PUT',
+            '/v1/product/' . $id,
             [],
             [],
             array('CONTENT_TYPE' => 'application/json'),
