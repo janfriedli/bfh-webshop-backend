@@ -74,20 +74,18 @@ class ProductControllerTest extends WebTestCase
     {
         $this->loadFixtures();
         $client = $this->makeClient();
-        $product = new \App\Entity\Product();
-        $product->setDescription('a description');
         $productJson = '{
             "title": "",
-            "description": "testDescription"
+            "description": ""
         }';
         $this->postProduct($productJson, $client);
 
         $this->assertStatusCode(400, $client);
         $error = json_decode($client->getResponse()->getContent());
-        //var_dump($error);die;
         $this->assertEquals('title', $error->violations[0]->propertyPath);
         $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
-
+        $this->assertEquals('description', $error->violations[1]->propertyPath);
+        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
     }
 
 
