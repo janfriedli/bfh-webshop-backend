@@ -12,8 +12,6 @@ install:
 
 script: phpunit
 
-# allow_failures: Allow this build to fail under the specified environments.
-# fast_finish: If your build fails do not continue trying to build, just stop.
 matrix:
  allow_failures:
    - php: nightly
@@ -22,9 +20,11 @@ matrix:
 deploy:
   provider: heroku
   api_key:
-    secure: JvMQbMZ80oVcXu1jyMtzl7SRYNF2k3WORX8h6iLMgSltuIPU0rsNR67W+MQQDVHuwcWNOTxty+lBVSf5iY0G3VcKmqW7Gic1BDZrWmRfivNwB3dBNfH5w0twFXCejiSGxna8KUpxsc+kJy1o6KC2KPlZiZIbA4ptXwgUpxWhkbfBiByx0mAfvVJzkfjSd1oIufoGDglJTXFywf3QgEAlOoW2mgSO6fq6AEVTXTgaVW6Sjvhl5ckHonFtC6N5tehZSKLMS9Fdv2GgrGxC7uMv+IOiE5jdKng2SrPkRGTELZhJIcrMN4cDMY6V87SS37ItQlwwyxTx6XEBZI8sZTuUaclP/CzQfVkCwiBywyi/03w2Jw+b0yKLl2wsyGi+LhPhXjECMAcnIaCtMJxdalbJiYoVQxD+lOG2pHhonS8R6vTish6xf/R/KKgDeLN0UQM9MwRMqUcdk1wMPpLNJW232aW4Ocr2Ru63k+7NrLdEtAxa+NwSt8kQSRj3YcMVgtuFl6MMvLdVuOQ5rG1/KkNBt+Ewjj3sNAD30wFfaMJdZxn1pALTHVb1y5Nx2LT+4Riyiv2R15VtixHeUkxdQqMpBHzPc2gPTmWpU+XpRlHRcbrWtGa9MTHbR81fpnODNGSRcheAUuLr+Lanvvs7lbVNmJYMHJBjDShsbJFGOzSOwXc=
+    secure: RfG+SkkYscUa9sk5f2wEWVjfjb2WlbZuvR7Oi4IzM2Dib3+i/IrLv5qd+HnhT2N/d1YjMLYs2EqZlt6pafqoETQdnXAbvK0lpzBufFsl8vrTrbTXcd4sLDUQiJZweLUrdYr6i3qStTfYeV0nRF1z/5DJWg3iaCrAdV0FjAhknUhfLgZLik8i0EFLfS8K/J1XrJ+/sEpqbPKWcgWwd2Z4LBAlj5k1E6T5ADXA1Rgtzw2MsE2KDZWvLEXtNXqyRz/Dt+TGtpXgGyUIHFCYu3OrNRI3U0T7XeU1wKTA1xE4s0AsqK3W/qfNkzOQjwlxT1Rsxg5NxL4xH0zsKeaoOX0h98xUiAAFKCIEnoVsW8FV2jkl7AV108Pdfi/npxk+21qZ2/MwNA4cJDWdGDEbIqRXej3kqt8bekGMj4x9AEt0SlPhFpHmUZ6Zx+ToIm6n8kKjeCVc7ddwwE5KuPdS5y286twFY8Wc1Y3AqOXKQN/6gkFMXS9KnU2P8HKsxFNKttIyLoe7bZ/3KlVHi7226v4YSXz6oA+eVgILdQnxjqQkOFqlOj9JeXDbibZjorLtF7oD2jRv72krQNcYVMhqAuoaVm2dfUhmmFV+fl25+VkakNByElIH4vjMrfMFIi4DjOhTG3uXpx/jo+OgX0/Ocj5OxZK/VJXJsDNnvY3io2LjTHk=
+  app: bfh-webshop-backend
+  on:
+    repo: janfriedli/bfh-webshop-backend
 
-# Customize when the notification emails are sent.
 notifications:
    on_success: never
    on_failure: always
