@@ -19,6 +19,11 @@ matrix:
    - php: nightly
  fast_finish: true
 
+deploy:
+  provider: heroku
+  api_key:
+    secure: bt+d0zY05JggC8n6E1glMQFEA6eYQNPYjPeU95GEUsFKkWDtBAMxX2aTXihEgFNUqD4KJfv0jivQVmuSRV54OlbORayCKt6/JgUVqkOEcSptrWN5R+ivftf6rxb2m+HkRTSO8b68CZEAR8Ibc+18Btnu1SI0lXi+HsEU9JosO2Zg9Jg7hql29xVFDJj7mq3+P4wW4p0kvD8aPsXphgEjHD0p3sy+YDTLkcVifDXEB8TQ9malvRRlwvyZUI4g2nNDJyg1J5J2pDZZ3YjNAjvMd/zPNh+V5RUPN4Gb0Yowv+8pEK7wKLw7i3kJ/cVw/bVBxU3tL/vtPLiUmC4x3XyKAkW3Uft87xCcFszcCqGAZPNiHtUggPgy/NtPfVbqnBHEyhcfHfWIDM9HfhYDnEQvdnjWA1NZUlc56QJEjeLmMeegLwAp+ED13Q4CAkYyERsQYOeXTo3VolL4lK3VrjkI4IFyVJZcUXtAeZHUtSyGLyuI5+CksHxUrXJXi4XMuItCil3cHsVbKZAt4onqpP2y63AyrrUZCiCD6JnDA6TqIR0GEwMdn2TuCETTchFos/xIbQVp+9orVGCX5veRc5SJyTZBnO7qd7cJBFMbmdgyvbJ8/JCwTwg4Jq5FXWG3Mh3juIb99//AUnxdEhQKOweCxNWHFFlymAd6RJa19iq7Ro8=
+
 # Customize when the notification emails are sent.
 notifications:
    on_success: never
