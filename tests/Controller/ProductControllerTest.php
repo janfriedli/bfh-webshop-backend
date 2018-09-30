@@ -137,6 +137,31 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
     }
 
+    /**
+     * DELETE a product
+     */
+    public function testDeleteProduct()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\ProductFixture'
+        ]);
+        $client = $this->makeClient();
+        $client->request(
+            'DELETE',
+            '/v1/product/1',
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            null
+        );
+        $this->assertStatusCode(204, $client);
+
+        $client->request('GET', '/v1/product');
+        $products = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(count($products), 19);
+        $this->assertEquals(2, $products[0]->id);
+    }
+
 
     /**
      * POST a product
