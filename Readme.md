@@ -1,7 +1,7 @@
 # The backend for the web shop application (bfh)
 [![Build Status](https://travis-ci.com/janfriedli/bfh-webshop-backend.svg?branch=master)](https://travis-ci.com/janfriedli/bfh-webshop-backend)
 
-## Getting started`
+## Getting started
 
 * clone this repo
 * run `composer install`
