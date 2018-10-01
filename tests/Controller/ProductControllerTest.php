@@ -14,6 +14,18 @@ class ProductControllerTest extends WebTestCase
         $client->request('GET', '/v1/product');
         $this->assertEmpty(json_decode($client->getResponse()->getContent()));
         $this->assertStatusCode(200, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
     }
 
 
@@ -30,6 +42,19 @@ class ProductControllerTest extends WebTestCase
         $client->request('GET', '/v1/product');
         $products = json_decode($client->getResponse()->getContent());
         $this->assertEquals(count($products), 20);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
+
         foreach ($products as $key => $product) {
             $this->assertEquals('description'.$key, $product->description);
             $this->assertEquals('product'.$key, $product->title);
@@ -58,6 +83,18 @@ class ProductControllerTest extends WebTestCase
             $productJson
         );
         $this->assertStatusCode(201, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
 
         $product = json_decode($client->getResponse()->getContent());
         $this->assertEquals(1, $product->id);
@@ -79,6 +116,19 @@ class ProductControllerTest extends WebTestCase
         $this->postProduct($productJson, $client);
 
         $this->assertStatusCode(400, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
+
         $error = json_decode($client->getResponse()->getContent());
         $this->assertEquals(2, count($error->violations));
         $this->assertEquals('title', $error->violations[0]->propertyPath);
@@ -104,6 +154,18 @@ class ProductControllerTest extends WebTestCase
 
         $this->putProduct(1, $productJson, $client);
         $this->assertStatusCode(200, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, PUT, DELETE'
+            )
+        );
 
         $updatedProduct = json_decode($client->getResponse()->getContent());
         $this->assertEquals(1, $updatedProduct->id);
@@ -128,6 +190,18 @@ class ProductControllerTest extends WebTestCase
 
         $this->putProduct(1, $productJson, $client);
         $this->assertStatusCode(400, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, PUT, DELETE'
+            )
+        );
 
         $error = json_decode($client->getResponse()->getContent());
         $this->assertEquals(2, count($error->violations));
@@ -155,6 +229,12 @@ class ProductControllerTest extends WebTestCase
             null
         );
         $this->assertStatusCode(204, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, PUT, DELETE'
+            )
+        );
 
         $client->request('GET', '/v1/product');
         $products = json_decode($client->getResponse()->getContent());
