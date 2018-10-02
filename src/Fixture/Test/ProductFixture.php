@@ -13,7 +13,10 @@ class ProductFixture extends Fixture
         for ($i = 0; $i < 20; $i++) {
             $product = new Product();
             $product->setTitle('product'.$i);
-            $product->setDescription('description'.$i);
+            $product->setDescription('description' .$i);
+            $product->setImgUrl('https://img.url/test' .$i. '.jpg');
+            $product->setPrice($i);
+            $product->setQuantity($i);
             $manager->persist($product);
         }
 
