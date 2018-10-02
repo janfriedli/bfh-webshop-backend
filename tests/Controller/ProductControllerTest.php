@@ -171,6 +171,12 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals(1, $updatedProduct->id);
         $this->assertEquals('newTitle', $updatedProduct->title);
         $this->assertEquals('newDescription', $updatedProduct->description);
+
+        $client->request('GET', '/v1/product/1');
+        $product = json_decode($client->getResponse()->getContent());
+        $this->assertEquals($product->id, $updatedProduct->id);
+        $this->assertEquals($product->title, $updatedProduct->title);
+        $this->assertEquals($product->description, $updatedProduct->description);
     }
 
     /**

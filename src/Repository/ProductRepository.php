@@ -60,6 +60,9 @@ class ProductRepository extends ServiceEntityRepository
         }
 
         $product->setId($id);
-        return $this->getEntityManager()->merge($product);
+        $product = $this->getEntityManager()->merge($product);
+        $this->getEntityManager()->flush();
+
+        return $product;
     }
 }
