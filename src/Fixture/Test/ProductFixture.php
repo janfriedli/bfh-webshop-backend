@@ -2,6 +2,7 @@
 
 namespace App\Fixture\Test;
 
+use App\Entity\StoreOrder;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;

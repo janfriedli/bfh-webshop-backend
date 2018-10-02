@@ -13,11 +13,18 @@ final class ProductService
     private $productRepository;
 
     /**
+     * @var CRUDService $crud
+     */
+    private $crud;
+
+    /**
      * ProductService constructor.
      * @param ProductRepository $productRepository
+     * @param CRUDService $crud
      */
-    public function __construct(ProductRepository $productRepository){
+    public function __construct(ProductRepository $productRepository, CRUDService $crud){
         $this->productRepository = $productRepository;
+        $this->crud = $crud;
     }
 
     /**
@@ -39,40 +46,37 @@ final class ProductService
 
     /**
      * @param Product $product
-     * @throws \Doctrine\ORM\ORMException
-     * @return Product
+     * @return object
      */
-    public function addProduct(Product $product): Product
+    public function addProduct(Product $product)
     {
-        $product = $this->productRepository->save($product);
+        $product = $this->crud->save($product);
         return $product;
     }
 
     /**
      * @param int $productId
      * @param Product $updatedProduct
-     * @throws \Doctrine\ORM\ORMException
-     * @return null|Product
+     * @return null|object
      */
-    public function updateProduct(int $productId, $updatedProduct): ?Product
+    public function updateProduct(int $productId, $updatedProduct)
     {
         $product = $this->productRepository->findOneById($productId);
         if (!$product) {
             return null;
         }
 
-        return $this->productRepository->update($productId, $updatedProduct);
+        return $this->crud->update($productId, $updatedProduct);
     }
 
     /**
      * @param int $productId
-     * @throws \Doctrine\ORM\ORMException
      */
     public function deleteProduct(int $productId): void
     {
         $product = $this->productRepository->findOneById($productId);
         if ($product) {
-            $this->productRepository->delete($product);
+            $this->crud->delete($product);
         }
     }
 
