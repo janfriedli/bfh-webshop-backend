@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
@@ -15,12 +16,6 @@ class StoreOrder
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="string", length=255, unique=true)
-     * @ORM\GeneratedValue(strategy="UUID")
-     */
-    private $referenceNumber;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -48,6 +43,10 @@ class StoreOrder
     private $paid;
 
     /**
+     *  @Assert\Count(
+     *      min = 1,
+     *      minMessage = "You must specify at least one product",
+     * )
      * @ORM\ManyToMany(targetEntity="Product")
      * @ORM\JoinTable(name="order_products",
      *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
@@ -63,18 +62,6 @@ class StoreOrder
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getReferenceNumber(): ?string
-    {
-        return $this->referenceNumber;
-    }
-
-    public function setReferenceNumber(string $referenceNumber): self
-    {
-        $this->referenceNumber = $referenceNumber;
-
-        return $this;
     }
 
     public function getStreet(): ?string

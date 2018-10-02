@@ -28,11 +28,11 @@ class StoreOrderFixture extends Fixture
          * first order
          */
         $order = new StoreOrder();
-        $order->setCountry('CH');
-        $order->setFullname('testName1');
+        $order->setCountry('CH0');
+        $order->setFullname('testName0');
         $order->setPaid(false);
-        $order->setStreet('testStreet1');
-        $order->setZip('testZip1');
+        $order->setStreet('testStreet0');
+        $order->setZip('testZip0');
         $order->addProduct($products->get(0));
         $order->addProduct($products->get(1));
         $order->addProduct($products->get(2));
@@ -42,23 +42,12 @@ class StoreOrderFixture extends Fixture
          * second order
          */
         $order = new StoreOrder();
-        $order->setCountry('DE');
-        $order->setFullname('testName2');
+        $order->setCountry('CH1');
+        $order->setFullname('testName1');
         $order->setPaid(false);
-        $order->setStreet('testStreet2');
-        $order->setZip('testZip2');
+        $order->setStreet('testStreet1');
+        $order->setZip('testZip1');
         $order->setProducts($products);
-        $manager->persist($order);
-
-        /**
-         * third order
-         */
-        $order = new StoreOrder();
-        $order->setCountry('FR');
-        $order->setFullname('testName3');
-        $order->setPaid(false);
-        $order->setStreet('testStreet3');
-        $order->setZip('testZip3');
         $manager->persist($order);
 
         $manager->flush();

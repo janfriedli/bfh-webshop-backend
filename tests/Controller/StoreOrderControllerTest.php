@@ -28,42 +28,53 @@ class StoreOrderControllerTest extends WebTestCase
         );
     }
 
-//
-//    /**
-//     * GET the populated storeOrders
-//     */
-//    public function testGetPopulatedStoreOrders()
-//    {
-//        $this->loadFixtures([
-//            'App\Fixture\Test\StoreOrderFixture'
-//        ]);
-//
-//        $client = $this->makeClient();
-//        $client->request('GET', '/v1/order');
-//        $storeOrders = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(count($storeOrders), 20);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Content-Type',
-//                'application/json'
-//            )
-//        );
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, POST'
-//            )
-//        );
-//
-//        foreach ($storeOrders as $key => $storeOrder) {
-//            $this->assertEquals('description'.$key, $storeOrder->description);
-//            $this->assertEquals('storeOrder'.$key, $storeOrder->title);
-//            $this->assertEquals($key, $storeOrder->price);
-//            $this->assertEquals($key, $storeOrder->quantity);
-//            $this->assertEquals('https://img.url/test' .$key. '.jpg', $storeOrder->imgUrl);
-//        }
-//        $this->assertStatusCode(200, $client);
-//    }
+
+    /**
+     * GET the populated storeOrders
+     */
+    public function testGetPopulatedStoreOrders()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+
+        $client = $this->makeClient();
+        $client->request('GET', '/v1/order');
+        $storeOrders = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(count($storeOrders), 2);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
+
+        foreach ($storeOrders as $key => $storeOrder) {
+            $this->assertEquals('CH'.$key, $storeOrder->country);
+            $this->assertEquals('testName'.$key, $storeOrder->fullname);
+            $this->assertEquals('testStreet'.$key, $storeOrder->street);
+            $this->assertEquals('testZip'.$key, $storeOrder->zip);
+        }
+
+        $this->assertEquals(3, count($storeOrders[0]->products));
+        foreach ($storeOrders[0]->products as $key => $product) {
+            $this->assertEquals('product'.$key, $product->title);
+        }
+
+        $this->assertEquals(20, count($storeOrders[1]->products));
+        foreach ($storeOrders[1]->products as $key => $product) {
+            $this->assertEquals('product'.$key, $product->title);
+        }
+
+        $this->assertStatusCode(200, $client);
+
+    }
 //
 //    /**
 //     * POST a storeOrder
