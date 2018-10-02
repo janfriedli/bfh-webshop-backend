@@ -29,6 +29,25 @@ class Product
      */
     private $description;
 
+    /**
+     * @Assert\Url()
+     * @Assert\NotBlank()
+     * @ORM\Column(type="string", length=255)
+     */
+    private $imgUrl;
+
+    /**
+     * @Assert\NotBlank()
+     * @ORM\Column(type="float")
+     */
+    private $price;
+
+    /**
+     * @Assert\NotBlank()
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +78,42 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getImgUrl(): ?string
+    {
+        return $this->imgUrl;
+    }
+
+    public function setImgUrl(string $imgUrl): self
+    {
+        $this->imgUrl = $imgUrl;
+
+        return $this;
+    }
+
+    public function getPrice(): ?float
+    {
+        return $this->price;
+    }
+
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }
