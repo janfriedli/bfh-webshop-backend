@@ -59,6 +59,7 @@ final class CRUDService
         $entity->setId($id);
         $entity = $this->entityManager->merge($entity);
         $this->entityManager->flush();
+        $this->entityManager->refresh($entity);
 
         return $entity;
     }

@@ -1,11 +1,13 @@
 <?php
 namespace App\Service;
 
+use App\Entity\Product;
 use App\Entity\StoreOrder;
 use App\Repository\OrderRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Common\Collections\ArrayCollection;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 final class OrderService
 {
@@ -75,7 +77,7 @@ final class OrderService
             return null;
         }
 
-        return $this->crud->update($orderId, $updatedOrder);
+        return $this->crud->update($orderId, $this->associateProducts($updatedOrder));
     }
 
     /**
@@ -97,12 +99,17 @@ final class OrderService
     private function associateProducts(StoreOrder $order) {
         $products = new ArrayCollection();
         foreach ($order->getProducts() as $product) {
-            $products->add($this->em->merge($product));
+            $storedProduct = $this->em->getRepository(Product::class)->findOneById($product->getId());
+            if (!$storedProduct) {
+                throw new BadRequestHttpException(
+                    'The product with the id: ' . $product->getId() . ' does not exist!'
+                );
+            }
+
+            $products->add($storedProduct);
         }
-        $order->setProducts(new ArrayCollection());
         $order->setProducts($products);
 
         return $order;
     }
-
 }

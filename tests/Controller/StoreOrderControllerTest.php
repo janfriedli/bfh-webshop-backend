@@ -176,58 +176,69 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals('country', $error[3]->property_path);
         $this->assertEquals('This value should not be blank.', $error[3]->message);
     }
-    
-//
-//    /**
-//     * PUT a storeOrder
-//     */
-//    public function testPutStoreOrder()
-//    {
-//        $this->loadFixtures([
-//            'App\Fixture\Test\StoreOrderFixture'
-//        ]);
-//        $client = $this->makeClient();
-//
-//        $storeOrderJson = '{
-//            "title": "newTitle",
-//            "description": "newDescription",
-//            "imgUrl": "https://img.url/test.png",
-//            "price": 33,
-//            "quantity": 45
-//        }';
-//
-//        $this->putStoreOrder(1, $storeOrderJson, $client);
-//        $this->assertStatusCode(200, $client);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Content-Type',
-//                'application/json'
-//            )
-//        );
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, PUT, DELETE'
-//            )
-//        );
-//
-//        $updatedStoreOrder = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(1, $updatedStoreOrder->id);
-//        $this->assertEquals('newTitle', $updatedStoreOrder->title);
-//        $this->assertEquals('newDescription', $updatedStoreOrder->description);
-//        $this->assertEquals('https://img.url/test.png', $updatedStoreOrder->imgUrl);
-//        $this->assertEquals(33, $updatedStoreOrder->price);
-//        $this->assertEquals(45, $updatedStoreOrder->quantity);
-//
-//        $client->request('GET', '/v1/order/1');
-//        $storeOrder = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals($storeOrder->id, $updatedStoreOrder->id);
-//        $this->assertEquals($storeOrder->title, $updatedStoreOrder->title);
-//        $this->assertEquals($storeOrder->description, $updatedStoreOrder->description);
-//        $this->assertEquals($storeOrder->imgUrl, $updatedStoreOrder->imgUrl);
-//        $this->assertEquals($storeOrder->price, $updatedStoreOrder->price);
-//        $this->assertEquals($storeOrder->quantity, $updatedStoreOrder->quantity);
-//    }
+
+    /**
+     * PUT a storeOrder
+     */
+    public function testPutStoreOrder()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+        $client = $this->makeClient();
+
+        $storeOrderJson = '{
+            "street": "testStreet",
+            "zip": "testZip",
+            "fullname": "testFullname",
+            "country": "testCountry",
+            "paid": false,
+            "products": [
+                {
+                  "id": 10
+                },
+                {
+                  "id": 11
+                }
+            ]
+        }';
+
+        $this->putStoreOrder(1, $storeOrderJson, $client);
+        $this->assertStatusCode(200, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, PUT, DELETE'
+            )
+        );
+
+        $updatedStoreOrder = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(1, $updatedStoreOrder->id);
+        $this->assertEquals('testStreet', $updatedStoreOrder->street);
+        $this->assertEquals('testZip', $updatedStoreOrder->zip);
+        $this->assertEquals('testFullname', $updatedStoreOrder->fullname);
+        $this->assertEquals('testCountry', $updatedStoreOrder->country);
+        $this->assertEquals(2, count($updatedStoreOrder->products));
+        $this->assertEquals(10, $updatedStoreOrder->products[0]->id);
+        $this->assertEquals(11, $updatedStoreOrder->products[1]->id);
+
+        $client->request('GET', '/v1/order/1');
+        $storeOrder = json_decode($client->getResponse()->getContent());
+        $this->assertEquals($storeOrder->id, $updatedStoreOrder->id);
+        $this->assertEquals($storeOrder->street, $updatedStoreOrder->street);
+        $this->assertEquals($storeOrder->zip, $updatedStoreOrder->zip);
+        $this->assertEquals($storeOrder->fullname, $updatedStoreOrder->fullname);
+        $this->assertEquals($storeOrder->country, $updatedStoreOrder->country);
+        $this->assertEquals(count($storeOrder->products), count($updatedStoreOrder->products));
+        $this->assertEquals($storeOrder->products[0]->id, $updatedStoreOrder->products[0]->id);
+        $this->assertEquals($storeOrder->products[1]->id, $updatedStoreOrder->products[1]->id);
+    }
 //
 //    /**
 //     * PUT a storeOrder with validation errors

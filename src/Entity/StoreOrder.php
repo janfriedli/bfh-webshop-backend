@@ -52,7 +52,7 @@ class StoreOrder
      *      min = 1,
      *      minMessage = "You must specify at least one product",
      * )
-     * @ORM\ManyToMany(targetEntity="Product")
+     * @ORM\ManyToMany(targetEntity="Product", cascade={"merge"})
      * @ORM\JoinTable(name="order_products",
      *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
@@ -63,6 +63,12 @@ class StoreOrder
 
     public function __construct() {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+
+    public function setId(int $id): void
+    {
+        $this->id = $id;
     }
 
     public function getId(): ?int
