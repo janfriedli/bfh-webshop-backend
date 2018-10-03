@@ -4,6 +4,9 @@ php:
   - '7.2'
   - nightly
 
+env:
+  - SYMFONY_DEPRECATIONS_HELPER="weak_vendors"
+
 before_script:
   - composer self-update
 
