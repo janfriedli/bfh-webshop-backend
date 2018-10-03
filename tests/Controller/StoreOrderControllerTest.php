@@ -135,53 +135,48 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals(1, $storeOrder->products[0]->id);
         $this->assertEquals(2, $storeOrder->products[1]->id);
     }
-//
-//    /**
-//     * POST a storeOrder with error
-//     */
-//    public function testPostStoreOrderValidation()
-//    {
-//        $this->loadFixtures();
-//        $client = $this->makeClient();
-//        $storeOrderJson = '{
-//            
-//        }';
-//        $this->postStoreOrder($storeOrderJson, $client);
-//
-//        $this->assertStatusCode(400, $client);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Content-Type',
-//                'application/json'
-//            )
-//        );
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, POST'
-//            )
-//        );
-//
-//        $error = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(5, count($error->violations));
-//        $this->assertEquals('title', $error->violations[0]->propertyPath);
-//        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
-//        $this->assertEquals('description', $error->violations[1]->propertyPath);
-//        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
-//        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
-//        $this->assertEquals('This value should not be blank.', $error->violations[2]->title);
-//        $this->assertEquals('price', $error->violations[3]->propertyPath);
-//        $this->assertEquals('This value should not be blank.', $error->violations[3]->title);
-//        $this->assertEquals('quantity', $error->violations[4]->propertyPath);
-//        $this->assertEquals('This value should not be blank.', $error->violations[4]->title);
-//
-//        $this->postStoreOrder('{"imgUrl": "notARealUrl"}', $client);
-//        $error = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(5, count($error->violations));
-//        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
-//        $this->assertEquals('This value is not a valid URL.', $error->violations[2]->title);
-//
-//    }
+
+    /**
+     * POST a storeOrder with error
+     */
+    public function testPostStoreOrderValidation()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+
+        $client = $this->makeClient();
+        $storeOrderJson = '{
+            
+        }';
+        $this->postStoreOrder($storeOrderJson, $client);
+
+        $this->assertStatusCode(400, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
+
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(4, count($error));
+        $this->assertEquals('street', $error[0]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[0]->message);
+        $this->assertEquals('zip', $error[1]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[1]->message);
+        $this->assertEquals('fullname', $error[2]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[2]->message);
+        $this->assertEquals('country', $error[3]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[3]->message);
+    }
+    
 //
 //    /**
 //     * PUT a storeOrder
@@ -265,21 +260,21 @@ class StoreOrderControllerTest extends WebTestCase
 //
 //        $error = json_decode($client->getResponse()->getContent());
 //        $this->assertEquals(5, count($error->violations));
-//        $this->assertEquals('title', $error->violations[0]->propertyPath);
+//        $this->assertEquals('title', $error->violations[0]->property_path);
 //        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
-//        $this->assertEquals('description', $error->violations[1]->propertyPath);
+//        $this->assertEquals('description', $error->violations[1]->property_path);
 //        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
-//        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
+//        $this->assertEquals('imgUrl', $error->violations[2]->property_path);
 //        $this->assertEquals('This value should not be blank.', $error->violations[2]->title);
-//        $this->assertEquals('price', $error->violations[3]->propertyPath);
+//        $this->assertEquals('price', $error->violations[3]->property_path);
 //        $this->assertEquals('This value should not be blank.', $error->violations[3]->title);
-//        $this->assertEquals('quantity', $error->violations[4]->propertyPath);
+//        $this->assertEquals('quantity', $error->violations[4]->property_path);
 //        $this->assertEquals('This value should not be blank.', $error->violations[4]->title);
 //
 //        $this->postStoreOrder('{"imgUrl": "notARealUrl"}', $client);
 //        $error = json_decode($client->getResponse()->getContent());
 //        $this->assertEquals(5, count($error->violations));
-//        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
+//        $this->assertEquals('imgUrl', $error->violations[2]->property_path);
 //        $this->assertEquals('This value is not a valid URL.', $error->violations[2]->title);
 //    }
 //
@@ -315,38 +310,36 @@ class StoreOrderControllerTest extends WebTestCase
 //    }
 //
 //
-//    /**
-//     * POST a storeOrder
-//     * @param string $body
-//     * @param $client
-//     */
-//    private function postStoreOrder(string $body, $client) {
-//        $client->request(
-//            'POST',
-//            '/v1/order',
-//            [],
-//            [],
-//            array('CONTENT_TYPE' => 'application/json'),
-//            $body
-//        );
-//    }
-//
-//    /**
-//     * PUT a storeOrder
-//     * @param $id
-//     * @param string $body
-//     * @param $client
-//     */
-//    private function putStoreOrder(int $id,string $body, $client) {
-//        $client->request(
-//            'PUT',
-//            '/v1/order/' . $id,
-//            [],
-//            [],
-//            array('CONTENT_TYPE' => 'application/json'),
-//            $body
-//        );
-//    }
+    /**
+     * POST a storeOrder
+     * @param string $body
+     * @param $client
+     */
+    private function postStoreOrder(string $body, $client) {
+        $client->request(
+            'POST',
+            '/v1/order',
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            $body
+        );
+    }
 
-
+    /**
+     * PUT a storeOrder
+     * @param $id
+     * @param string $body
+     * @param $client
+     */
+    private function putStoreOrder(int $id,string $body, $client) {
+        $client->request(
+            'PUT',
+            '/v1/order/' . $id,
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            $body
+        );
+    }
 }

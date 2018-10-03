@@ -18,26 +18,31 @@ class StoreOrder
     private $id;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $street;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $zip;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $fullname;
 
     /**
+     * @Assert\NotBlank()
      * @ORM\Column(type="string", length=255)
      */
     private $country;
 
     /**
+     * that (public) field would not make sense in a real environment but for the sake of that project at the bfh...
      * @ORM\Column(type="boolean")
      */
     private $paid;
