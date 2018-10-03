@@ -240,54 +240,46 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals($storeOrder->products[1]->id, $updatedStoreOrder->products[1]->id);
     }
 //
-//    /**
-//     * PUT a storeOrder with validation errors
-//     */
-//    public function testPutStoreOrderValidation()
-//    {
-//        $this->loadFixtures([
-//            'App\Fixture\Test\StoreOrderFixture'
-//        ]);
-//        $client = $this->makeClient();
-//
-//        $storeOrderJson = '{
-//           
-//        }';
-//
-//        $this->putStoreOrder(1, $storeOrderJson, $client);
-//        $this->assertStatusCode(400, $client);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Content-Type',
-//                'application/json'
-//            )
-//        );
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, PUT, DELETE'
-//            )
-//        );
-//
-//        $error = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(5, count($error->violations));
-//        $this->assertEquals('title', $error->violations[0]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
-//        $this->assertEquals('description', $error->violations[1]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
-//        $this->assertEquals('imgUrl', $error->violations[2]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error->violations[2]->title);
-//        $this->assertEquals('price', $error->violations[3]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error->violations[3]->title);
-//        $this->assertEquals('quantity', $error->violations[4]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error->violations[4]->title);
-//
-//        $this->postStoreOrder('{"imgUrl": "notARealUrl"}', $client);
-//        $error = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(5, count($error->violations));
-//        $this->assertEquals('imgUrl', $error->violations[2]->property_path);
-//        $this->assertEquals('This value is not a valid URL.', $error->violations[2]->title);
-//    }
+    /**
+     * PUT a storeOrder with validation errors
+     */
+    public function testPutStoreOrderValidation()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+        $client = $this->makeClient();
+
+        $storeOrderJson = '{
+           
+        }';
+
+        $this->putStoreOrder(1, $storeOrderJson, $client);
+        $this->assertStatusCode(400, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, PUT, DELETE'
+            )
+        );
+
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(4, count($error));
+        $this->assertEquals('street', $error[0]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[0]->message);
+        $this->assertEquals('zip', $error[1]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[1]->message);
+        $this->assertEquals('fullname', $error[2]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[2]->message);
+        $this->assertEquals('country', $error[3]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[3]->message);
+    }
 //
 //    /**
 //     * DELETE a storeOrder
