@@ -175,6 +175,23 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals('This value should not be blank.', $error[2]->message);
         $this->assertEquals('country', $error[3]->property_path);
         $this->assertEquals('This value should not be blank.', $error[3]->message);
+
+        $storeOrderJson = '{
+            "street": "testStreet",
+            "zip": "testZip",
+            "fullname": "testFullname",
+            "country": "testCountry",
+            "paid": false,
+            "products": [
+                
+            ]
+        }';
+
+        $this->postStoreOrder($storeOrderJson, $client);
+        $this->assertStatusCode(400, $client);
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals('products', $error[0]->property_path);
+        $this->assertEquals('You must specify at least one product', $error[0]->message);
     }
 
     /**
@@ -279,6 +296,23 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals('This value should not be blank.', $error[2]->message);
         $this->assertEquals('country', $error[3]->property_path);
         $this->assertEquals('This value should not be blank.', $error[3]->message);
+
+        $storeOrderJson = '{
+            "street": "testStreet",
+            "zip": "testZip",
+            "fullname": "testFullname",
+            "country": "testCountry",
+            "paid": false,
+            "products": [
+                
+            ]
+        }';
+
+        $this->postStoreOrder($storeOrderJson, $client);
+        $this->assertStatusCode(400, $client);
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals('products', $error[0]->property_path);
+        $this->assertEquals('You must specify at least one product', $error[0]->message);
     }
 
     /**
