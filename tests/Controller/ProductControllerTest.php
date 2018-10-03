@@ -60,7 +60,7 @@ class ProductControllerTest extends WebTestCase
             $this->assertEquals('product'.$key, $product->title);
             $this->assertEquals($key, $product->price);
             $this->assertEquals($key, $product->quantity);
-            $this->assertEquals('https://img.url/test' .$key. '.jpg', $product->imgUrl);
+            $this->assertEquals('https://img.url/test' .$key. '.jpg', $product->img_url);
         }
         $this->assertStatusCode(200, $client);
     }
@@ -75,7 +75,7 @@ class ProductControllerTest extends WebTestCase
         $productJson = '{
             "title": "testTitle",
             "description": "testDescription",
-            "imgUrl": "https://img.url/test.png",
+            "img_url": "https://img.url/test.png",
             "price": 33,
             "quantity": 45
         }';
@@ -106,7 +106,7 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals(1, $product->id);
         $this->assertEquals('testTitle', $product->title);
         $this->assertEquals('testDescription', $product->description);
-        $this->assertEquals('https://img.url/test.png', $product->imgUrl);
+        $this->assertEquals('https://img.url/test.png', $product->img_url);
         $this->assertEquals(33, $product->price);
         $this->assertEquals(45, $product->quantity);
     }
@@ -138,23 +138,23 @@ class ProductControllerTest extends WebTestCase
         );
 
         $error = json_decode($client->getResponse()->getContent());
-        $this->assertEquals(5, count($error->violations));
-        $this->assertEquals('title', $error->violations[0]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
-        $this->assertEquals('description', $error->violations[1]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
-        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[2]->title);
-        $this->assertEquals('price', $error->violations[3]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[3]->title);
-        $this->assertEquals('quantity', $error->violations[4]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[4]->title);
+        $this->assertEquals(5, count($error));
+        $this->assertEquals('title', $error[0]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[0]->message);
+        $this->assertEquals('description', $error[1]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[1]->message);
+        $this->assertEquals('imgUrl', $error[2]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[2]->message);
+        $this->assertEquals('price', $error[3]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[3]->message);
+        $this->assertEquals('quantity', $error[4]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[4]->message);
 
-        $this->postProduct('{"imgUrl": "notARealUrl"}', $client);
+        $this->postProduct('{"img_url": "notARealUrl"}', $client);
         $error = json_decode($client->getResponse()->getContent());
-        $this->assertEquals(5, count($error->violations));
-        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
-        $this->assertEquals('This value is not a valid URL.', $error->violations[2]->title);
+        $this->assertEquals(5, count($error));
+        $this->assertEquals('imgUrl', $error[2]->property_path);
+        $this->assertEquals('This value is not a valid URL.', $error[2]->message);
 
     }
 
@@ -171,7 +171,7 @@ class ProductControllerTest extends WebTestCase
         $productJson = '{
             "title": "newTitle",
             "description": "newDescription",
-            "imgUrl": "https://img.url/test.png",
+            "img_url": "https://img.url/test.png",
             "price": 33,
             "quantity": 45
         }';
@@ -195,7 +195,7 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals(1, $updatedProduct->id);
         $this->assertEquals('newTitle', $updatedProduct->title);
         $this->assertEquals('newDescription', $updatedProduct->description);
-        $this->assertEquals('https://img.url/test.png', $updatedProduct->imgUrl);
+        $this->assertEquals('https://img.url/test.png', $updatedProduct->img_url);
         $this->assertEquals(33, $updatedProduct->price);
         $this->assertEquals(45, $updatedProduct->quantity);
 
@@ -204,7 +204,7 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals($product->id, $updatedProduct->id);
         $this->assertEquals($product->title, $updatedProduct->title);
         $this->assertEquals($product->description, $updatedProduct->description);
-        $this->assertEquals($product->imgUrl, $updatedProduct->imgUrl);
+        $this->assertEquals($product->img_url, $updatedProduct->img_url);
         $this->assertEquals($product->price, $updatedProduct->price);
         $this->assertEquals($product->quantity, $updatedProduct->quantity);
     }
@@ -239,23 +239,23 @@ class ProductControllerTest extends WebTestCase
         );
 
         $error = json_decode($client->getResponse()->getContent());
-        $this->assertEquals(5, count($error->violations));
-        $this->assertEquals('title', $error->violations[0]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[0]->title);
-        $this->assertEquals('description', $error->violations[1]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[1]->title);
-        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[2]->title);
-        $this->assertEquals('price', $error->violations[3]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[3]->title);
-        $this->assertEquals('quantity', $error->violations[4]->propertyPath);
-        $this->assertEquals('This value should not be blank.', $error->violations[4]->title);
+        $this->assertEquals(5, count($error));
+        $this->assertEquals('title', $error[0]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[0]->message);
+        $this->assertEquals('description', $error[1]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[1]->message);
+        $this->assertEquals('imgUrl', $error[2]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[2]->message);
+        $this->assertEquals('price', $error[3]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[3]->message);
+        $this->assertEquals('quantity', $error[4]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[4]->message);
 
-        $this->postProduct('{"imgUrl": "notARealUrl"}', $client);
+        $this->postProduct('{"img_url": "notARealUrl"}', $client);
         $error = json_decode($client->getResponse()->getContent());
-        $this->assertEquals(5, count($error->violations));
-        $this->assertEquals('imgUrl', $error->violations[2]->propertyPath);
-        $this->assertEquals('This value is not a valid URL.', $error->violations[2]->title);
+        $this->assertEquals(5, count($error));
+        $this->assertEquals('imgUrl', $error[2]->property_path);
+        $this->assertEquals('This value is not a valid URL.', $error[2]->message);
     }
 
     /**

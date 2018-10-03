@@ -4,6 +4,8 @@ namespace App\Service;
 use App\Entity\StoreOrder;
 use App\Repository\OrderRepository;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\Common\Collections\ArrayCollection;
 
 final class OrderService
 {
@@ -18,13 +20,20 @@ final class OrderService
     private $crud;
 
     /**
+     * @var EntityManagerInterface $em
+     */
+    private $em;
+
+    /**
      * OrderService constructor.
      * @param OrderRepository $orderRepository
      * @param CRUDService $crud
+     * @param EntityManagerInterface $em
      */
-    public function __construct(OrderRepository $orderRepository, CRUDService $crud) {
+    public function __construct(OrderRepository $orderRepository, CRUDService $crud, EntityManagerInterface $em) {
         $this->orderRepository = $orderRepository;
         $this->crud = $crud;
+        $this->em = $em;
     }
 
     /**
@@ -46,18 +55,18 @@ final class OrderService
 
     /**
      * @param StoreOrder $order
-     * @return StoreOrder
+     * @return object
      */
-    public function addOrder(StoreOrder $order): StoreOrder
+    public function addOrder(StoreOrder $order)
     {
-        $order = $this->crud->save($order);
+        $order = $this->crud->save($this->associateProducts($order));
         return $order;
     }
 
     /**
      * @param int $orderId
      * @param StoreOrder $updatedOrder
-     * @return null|StoreOrder
+     * @return null|object
      */
     public function updateOrder(int $orderId, $updatedOrder): ?StoreOrder
     {
@@ -78,6 +87,22 @@ final class OrderService
         if ($order) {
             $this->crud->delete($order);
         }
+    }
+
+    /**
+     * map the associated products to its doctrine instance
+     * @param StoreOrder $order
+     * @return StoreOrder
+     */
+    private function associateProducts(StoreOrder $order) {
+        $products = new ArrayCollection();
+        foreach ($order->getProducts() as $product) {
+            $products->add($this->em->merge($product));
+        }
+        $order->setProducts(new ArrayCollection());
+        $order->setProducts($products);
+
+        return $order;
     }
 
 }
