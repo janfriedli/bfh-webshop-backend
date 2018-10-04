@@ -56,7 +56,7 @@ class StoreOrder
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="storeOrder", cascade={"All"})
      * @ORM\JoinColumn(nullable=true)
-     * @JMS\Exclude()
+     * @JMS\SerializedName("products")
      */
     private $storeOrderToProduct;
 
