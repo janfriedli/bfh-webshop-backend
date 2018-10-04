@@ -2,11 +2,17 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
+ * @JMS\VirtualProperty(
+ *     "storeOrderToProduct",
+ *     exp="object.getProductsInApiFormat()",
+ *     options={@JMS\SerializedName("products")}
+ *  )
  */
 class StoreOrder
 {
@@ -50,7 +56,7 @@ class StoreOrder
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="storeOrder", cascade={"All"})
      * @ORM\JoinColumn(nullable=true)
-     * @JMS\SerializedName("products")
+     * @JMS\Exclude()
      */
     private $storeOrderToProduct;
 
@@ -133,6 +139,20 @@ class StoreOrder
     public function getProducts()
     {
         return $this->storeOrderToProduct;
+    }
+
+    /**
+     * return ONLY the products
+     * @return ArrayCollection
+     */
+    public function getProductsInApiFormat()
+    {
+        $products = new ArrayCollection();
+        foreach ($this->storeOrderToProduct as $orderToProduct) {
+            $products->add($orderToProduct->getProduct());
+        }
+
+        return $products;
     }
 
     public function setProducts($products): void
