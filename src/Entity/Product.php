@@ -50,15 +50,12 @@ class Product
     private $quantity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="product", cascade={"All"})
-     * @ORM\JoinColumn(nullable=true)
-     * @JMS\SerializedName("orders")
-     * @JMS\Exclude(if="true")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="product")
      */
-    private $storeOrderToProduct;
+    private $orderDetails;
 
     public function __construct() {
-        $this->storeOrderToProduct = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->orderDetails = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function getId(): ?int
@@ -130,4 +127,33 @@ class Product
 
         return $this;
     }
+
+    public function getOrderDetail(): ?OrderDetail
+    {
+        return $this->orderDetail;
+    }
+
+    public function setOrderDetail(?OrderDetail $orderDetail): self
+    {
+        $this->orderDetail = $orderDetail;
+
+        return $this;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getOrderDetails()
+    {
+        return $this->orderDetails;
+    }
+
+    /**
+     * @param mixed $orderDetails
+     */
+    public function setOrderDetails($orderDetails): void
+    {
+        $this->orderDetails = $orderDetails;
+    }
+
 }

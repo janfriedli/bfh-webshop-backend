@@ -3,16 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
- * @JMS\VirtualProperty(
- *     "storeOrderToProduct",
- *     exp="object.getProductsInApiFormat()",
- *     options={@JMS\SerializedName("products")}
- *  )
  */
 class StoreOrder
 {
@@ -54,17 +50,14 @@ class StoreOrder
     private $paid;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="storeOrder", cascade={"All"})
-     * @ORM\JoinColumn(nullable=true)
-     * @JMS\SerializedName("products")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="storeOrder")
      */
-    private $storeOrderToProduct;
+    private $details;
 
-
-    public function __construct() {
-        $this->storeOrderToProduct = new \Doctrine\Common\Collections\ArrayCollection();
+    public function __construct()
+    {
+        $this->details = new ArrayCollection();
     }
-
 
     public function setId(int $id): void
     {
@@ -136,38 +129,34 @@ class StoreOrder
         return $this;
     }
 
-    public function getProducts()
-    {
-        return $this->storeOrderToProduct;
-    }
-
     /**
-     * return ONLY the products
-     * @return ArrayCollection
+     * @return Collection|OrderDetail[]
      */
-    public function getProductsInApiFormat()
+    public function getDetails(): Collection
     {
-        $products = new ArrayCollection();
-        foreach ($this->storeOrderToProduct as $orderToProduct) {
-            $products->add($orderToProduct->getProduct());
+        return $this->details;
+    }
+
+    public function addDetail(OrderDetail $detail): self
+    {
+        if (!$this->details->contains($detail)) {
+            $this->details[] = $detail;
+            $detail->setStoreOrder($this);
         }
 
-        return $products;
+        return $this;
     }
 
-    public function setProducts($products): void
+    public function removeDetail(OrderDetail $detail): self
     {
-        foreach ($products as $product) {
-            $this->addProduct($product);
+        if ($this->details->contains($detail)) {
+            $this->details->removeElement($detail);
+            // set the owning side to null (unless already changed)
+            if ($detail->getStoreOrder() === $this) {
+                $detail->setStoreOrder(null);
+            }
         }
-    }
 
-    public function addProduct(Product $product)
-    {
-        $storeOrderProduct = new StoreOrderToProduct();
-        $storeOrderProduct->setProduct($product);
-        $storeOrderProduct->setStoreOrder($this);
-        $this->storeOrderToProduct->add($storeOrderProduct);
+        return $this;
     }
-
 }
