@@ -2,6 +2,7 @@
 
 namespace App\Fixture\Test;
 
+use App\Entity\OrderDetail;
 use App\Entity\StoreOrder;
 use App\Entity\Product;
 use Doctrine\Bundle\FixturesBundle\Fixture;
@@ -33,9 +34,17 @@ class StoreOrderFixture extends Fixture
         $order->setPaid(false);
         $order->setStreet('testStreet0');
         $order->setZip('testZip0');
-        $order->addProduct($products->get(0));
-        $order->addProduct($products->get(1));
-        $order->addProduct($products->get(2));
+        $orderDetail = new OrderDetail();
+        $orderDetail->setStoreOrder($order);
+        $orderDetail->setProduct($products->get(0));
+        $orderDetail->setQuantity(2);
+        $manager->persist($orderDetail);
+
+        $orderDetail = new OrderDetail();
+        $orderDetail->setProduct($products->get(0));
+        $orderDetail->setStoreOrder($order);
+        $orderDetail->setQuantity(55);
+        $manager->persist($orderDetail);
         $manager->persist($order);
 
         /**
@@ -47,7 +56,18 @@ class StoreOrderFixture extends Fixture
         $order->setPaid(false);
         $order->setStreet('testStreet1');
         $order->setZip('testZip1');
-        $order->setProducts($products);
+        $orderDetail = new OrderDetail();
+        $orderDetail->setProduct($products->get(1));
+        $orderDetail->setStoreOrder($order);
+        $orderDetail->setQuantity(23);
+        $manager->persist($orderDetail);
+
+        $orderDetail = new OrderDetail();
+        $orderDetail->setProduct($products->get(2));
+        $orderDetail->setStoreOrder($order);
+        $orderDetail->setQuantity(21);
+        $manager->persist($orderDetail);
+        $manager->persist($order);
         $manager->persist($order);
 
         $manager->flush();
