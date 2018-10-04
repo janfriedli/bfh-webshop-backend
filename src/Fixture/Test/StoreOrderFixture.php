@@ -41,7 +41,7 @@ class StoreOrderFixture extends Fixture
         $manager->persist($orderDetail);
 
         $orderDetail = new OrderDetail();
-        $orderDetail->setProduct($products->get(0));
+        $orderDetail->setProduct($products->get(1));
         $orderDetail->setStoreOrder($order);
         $orderDetail->setQuantity(55);
         $manager->persist($orderDetail);

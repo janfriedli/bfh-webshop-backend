@@ -51,6 +51,7 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="product")
+     * @JMS\Exclude()
      */
     private $orderDetails;
 
