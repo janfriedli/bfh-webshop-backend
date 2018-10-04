@@ -48,21 +48,14 @@ class StoreOrder
     private $paid;
 
     /**
-     *  @Assert\Count(
-     *      min = 1,
-     *      minMessage = "You must specify at least one product",
-     * )
-     * @ORM\ManyToMany(targetEntity="Product", cascade={"merge"})
-     * @ORM\JoinTable(name="order_products",
-     *      joinColumns={@ORM\JoinColumn(name="order_id", referencedColumnName="id")},
-     *      inverseJoinColumns={@ORM\JoinColumn(name="product_id", referencedColumnName="id")}
-     *      )
-     * @JMS\Type("ArrayCollection<App\Entity\Product>")
+     * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="storeOrder", cascade={"All"})
+     * @JMS\SerializedName("products")
      */
-    private $products;
+    private $storeOrderToProduct;
+
 
     public function __construct() {
-        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->storeOrderToProduct = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
@@ -138,17 +131,22 @@ class StoreOrder
 
     public function getProducts()
     {
-        return $this->products;
+        return $this->storeOrderToProduct;
     }
 
     public function setProducts($products): void
     {
-        $this->products = $products;
+        foreach ($products as $product) {
+            $this->addProduct($product);
+        }
     }
 
     public function addProduct(Product $product)
     {
-        $this->products->add($product);
+        $storeOrderProduct = new StoreOrderToProduct();
+        $storeOrderProduct->setProduct($product);
+        $storeOrderProduct->setStoreOrder($this);
+        $this->storeOrderToProduct->add($storeOrderProduct);
     }
 
 }

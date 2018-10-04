@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
@@ -47,6 +48,16 @@ class Product
      * @ORM\Column(type="integer")
      */
     private $quantity;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="product", cascade={"All"})
+     * @JMS\SerializedName("orders")
+     */
+    private $storeOrderToProduct;
+
+    public function __construct() {
+        $this->storeOrderToProduct = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     public function getId(): ?int
     {
