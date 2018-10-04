@@ -51,6 +51,7 @@ class Product
 
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\StoreOrderToProduct", mappedBy="product", cascade={"All"})
+     * @ORM\JoinColumn(nullable=true)
      * @JMS\SerializedName("orders")
      */
     private $storeOrderToProduct;

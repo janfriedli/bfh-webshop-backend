@@ -19,13 +19,11 @@ class StoreOrderToProduct
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="storeOrderToProduct")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $product;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\StoreOrder", inversedBy="storeOrderToProduct")
-     * @ORM\JoinColumn(nullable=false)
      */
     private $storeOrder;
 
