@@ -72,66 +72,82 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals(55, $details[1]->quantity);
         $this->assertEquals(2, $details[1]->product->id);
     }
-//
-//    /**
-//     * POST a storeOrder
-//     */
-//    public function testPostStoreOrder()
-//    {
-//        $this->loadFixtures([
-//            'App\Fixture\Test\StoreOrderFixture'
-//        ]);
-//
-//        $client = $this->makeClient();
-//        $storeOrderJson = '{
-//            "street": "testStreet",
-//            "zip": "testZip",
-//            "fullname": "testFullname",
-//            "country": "testCountry",
-//            "paid": false,
-//            "products": [
-//                {
-//                  "id": 1
-//                },
-//                {
-//                  "id": 2
-//                }
-//            ]
-//        }';
-//
-//        $client->request(
-//            'POST',
-//            '/v1/order',
-//            [],
-//            [],
-//            array('CONTENT_TYPE' => 'application/json'),
-//            $storeOrderJson
-//        );
-//
-//        $this->assertStatusCode(201, $client);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Content-Type',
-//                'application/json'
-//            )
-//        );
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, POST'
-//            )
-//        );
-//
-//        $storeOrder = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(3, $storeOrder->id);
-//        $this->assertEquals('testStreet', $storeOrder->street);
-//        $this->assertEquals('testZip', $storeOrder->zip);
-//        $this->assertEquals('testFullname', $storeOrder->fullname);
-//        $this->assertEquals('testCountry', $storeOrder->country);
-//        $this->assertEquals(2, count($storeOrder->products));
-//        $this->assertEquals(1, $storeOrder->products[0]->id);
-//        $this->assertEquals(2, $storeOrder->products[1]->id);
-//    }
+
+    /**
+     * POST a storeOrder
+     */
+    public function testPostStoreOrder()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+
+        $client = $this->makeClient();
+        $storeOrderJson = '{
+            "street": "testStreet",
+            "zip": "testZip",
+            "fullname": "testName",
+            "country": "CH",
+            "paid": false,
+            "details": [
+                {
+                    "product": {
+                        "id": 1,
+                        "title": "product",
+                        "description": "description",
+                        "img_url": "https://img.url/test.jpg",
+                        "price": 0,
+                        "quantity": 0
+                    },
+                    "quantity": 2
+                },
+                {
+                    "product": {
+                        "id": 2,
+                        "title": "product0",
+                        "description": "description0",
+                        "img_url": "https://img.url/test0.jpg",
+                        "price": 0,
+                        "quantity": 0
+                    },
+                    "quantity": 55
+                }
+            ]
+        }';
+
+        $client->request(
+            'POST',
+            '/v1/order',
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            $storeOrderJson
+        );
+
+        $this->assertStatusCode(201, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
+
+        $storeOrder = json_decode($client->getResponse()->getContent());
+        $this->assertEquals('CH', $storeOrder->country);
+        $this->assertEquals('testName', $storeOrder->fullname);
+        $this->assertEquals('testStreet', $storeOrder->street);
+        $this->assertEquals('testZip', $storeOrder->zip);
+        $this->assertFalse($storeOrder->paid);
+        $details = $storeOrder->details;
+        $this->assertEquals(2, count($details));
+
+    }
 //
 //    /**
 //     * POST a storeOrder with error

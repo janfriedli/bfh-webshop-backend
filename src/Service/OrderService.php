@@ -61,7 +61,7 @@ final class OrderService
      */
     public function addOrder(StoreOrder $order)
     {
-        $order = $this->crud->save($this->associateProducts($order));
+        $order = $this->crud->save($order);
         return $order;
     }
 
@@ -77,7 +77,7 @@ final class OrderService
             return null;
         }
 
-        return $this->crud->update($orderId, $this->associateProducts($updatedOrder));
+        return $this->crud->update($orderId, $updatedOrder);
     }
 
     /**
@@ -89,27 +89,5 @@ final class OrderService
         if ($order) {
             $this->crud->delete($order);
         }
-    }
-
-    /**
-     * map the associated products to its doctrine instance
-     * @param StoreOrder $order
-     * @return StoreOrder
-     */
-    private function associateProducts(StoreOrder $order) {
-        $products = new ArrayCollection();
-        foreach ($order->getProducts() as $product) {
-            $storedProduct = $this->em->getRepository(Product::class)->findOneById($product->getId());
-            if (!$storedProduct) {
-                throw new BadRequestHttpException(
-                    'The product with the id: ' . $product->getId() . ' does not exist!'
-                );
-            }
-
-            $products->add($storedProduct);
-        }
-        $order->setProducts($products);
-
-        return $order;
     }
 }

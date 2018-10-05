@@ -9,6 +9,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
 /**
  * @ORM\Entity(repositoryClass="App\Repository\OrderRepository")
+ * @JMS\AccessType("public_method")
  */
 class StoreOrder
 {
@@ -50,7 +51,8 @@ class StoreOrder
     private $paid;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="storeOrder")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="storeOrder", cascade={"all"})
+     * @ORM\JoinColumn(nullable=false)
      */
     private $details;
 
@@ -137,8 +139,23 @@ class StoreOrder
         return $this->details;
     }
 
+    public function setDetails(Collection $details): self
+    {
+        foreach ($details as $detail) {
+            $this->addDetail($detail);
+        }
+
+        return $this;
+    }
+
     public function addDetail(OrderDetail $detail): self
     {
+        // strange hack but it seems that details aren't initialized when this method is called...
+        // even tough we init it in the constructor
+        if ($this->details == null) {
+            $this->details = new ArrayCollection();
+        }
+
         if (!$this->details->contains($detail)) {
             $this->details[] = $detail;
             $detail->setStoreOrder($this);

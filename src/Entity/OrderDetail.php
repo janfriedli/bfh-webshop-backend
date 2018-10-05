@@ -19,7 +19,7 @@ class OrderDetail
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderDetails")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderDetails", cascade={"persist"})
      */
     private $product;
 
@@ -29,8 +29,7 @@ class OrderDetail
     private $quantity;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\StoreOrder", inversedBy="details")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\ManyToOne(targetEntity="App\Entity\StoreOrder", inversedBy="details", cascade={"persist"})
      */
     private $storeOrder;
 
