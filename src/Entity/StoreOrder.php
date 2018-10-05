@@ -53,6 +53,11 @@ class StoreOrder
     /**
      * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="storeOrder", cascade={"all"})
      * @ORM\JoinColumn(nullable=false)
+     * @Assert\NotBlank()
+     * @Assert\Count(
+     *      min = 1,
+     *      minMessage = "You must specify at least one Order Detail"
+     * )
      */
     private $details;
 

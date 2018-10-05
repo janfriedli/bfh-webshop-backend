@@ -149,63 +149,61 @@ class StoreOrderControllerTest extends WebTestCase
 
     }
 //
-//    /**
-//     * POST a storeOrder with error
-//     */
-//    public function testPostStoreOrderValidation()
-//    {
-//        $this->loadFixtures([
-//            'App\Fixture\Test\StoreOrderFixture'
-//        ]);
-//
-//        $client = $this->makeClient();
-//        $storeOrderJson = '{
-//
-//        }';
-//        $this->postStoreOrder($storeOrderJson, $client);
-//
-//        $this->assertStatusCode(400, $client);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Content-Type',
-//                'application/json'
-//            )
-//        );
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, POST'
-//            )
-//        );
-//
-//        $error = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(4, count($error));
-//        $this->assertEquals('street', $error[0]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error[0]->message);
-//        $this->assertEquals('zip', $error[1]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error[1]->message);
-//        $this->assertEquals('fullname', $error[2]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error[2]->message);
-//        $this->assertEquals('country', $error[3]->property_path);
-//        $this->assertEquals('This value should not be blank.', $error[3]->message);
-//
-//        $storeOrderJson = '{
-//            "street": "testStreet",
-//            "zip": "testZip",
-//            "fullname": "testFullname",
-//            "country": "testCountry",
-//            "paid": false,
-//            "products": [
-//
-//            ]
-//        }';
-//
-//        $this->postStoreOrder($storeOrderJson, $client);
-//        $this->assertStatusCode(400, $client);
-//        $error = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals('products', $error[0]->property_path);
-//        $this->assertEquals('You must specify at least one product', $error[0]->message);
-//    }
+    /**
+     * POST a storeOrder with error
+     */
+    public function testPostStoreOrderValidation()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+
+        $client = $this->makeClient();
+        $storeOrderJson = '{
+
+        }';
+        $this->postStoreOrder($storeOrderJson, $client);
+
+        $this->assertStatusCode(400, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Content-Type',
+                'application/json'
+            )
+        );
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, POST'
+            )
+        );
+
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(5, count($error));
+        $this->assertEquals('street', $error[0]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[0]->message);
+        $this->assertEquals('zip', $error[1]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[1]->message);
+        $this->assertEquals('fullname', $error[2]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[2]->message);
+        $this->assertEquals('country', $error[3]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[3]->message);
+
+        $storeOrderJson = '{
+            "street": "testStreet",
+            "zip": "testZip",
+            "fullname": "testName",
+            "country": "CH",
+            "paid": false,
+            "details": []
+        }';
+
+        $this->postStoreOrder($storeOrderJson, $client);
+        $this->assertStatusCode(400, $client);
+        $error = json_decode($client->getResponse()->getContent());
+        $this->assertEquals('details', $error[0]->property_path);
+        $this->assertEquals('This value should not be blank.', $error[0]->message);
+    }
 //
 //    /**
 //     * PUT a storeOrder
