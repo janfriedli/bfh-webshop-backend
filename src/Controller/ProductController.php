@@ -15,6 +15,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use App\Exception\ValidationException;
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 
 class ProductController extends FOSRestController
@@ -39,6 +42,11 @@ class ProductController extends FOSRestController
      * @param int $productId
      * @return View
      * @throws \Doctrine\ORM\ORMException
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a product resource",
+     *     @Model(type=App\Entity\Product::class, groups={"non_sensitive_data"})
+     * )
      */
     public function getProduct(int $productId): View
     {
