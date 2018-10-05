@@ -347,37 +347,37 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals('details', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
     }
-//
-//    /**
-//     * DELETE a storeOrder
-//     */
-//    public function testDeleteStoreOrder()
-//    {
-//        $this->loadFixtures([
-//            'App\Fixture\Test\StoreOrderFixture'
-//        ]);
-//        $client = $this->makeClient();
-//        $client->request(
-//            'DELETE',
-//            '/v1/order/1',
-//            [],
-//            [],
-//            array('CONTENT_TYPE' => 'application/json'),
-//            null
-//        );
-//        $this->assertStatusCode(204, $client);
-//        $this->assertTrue(
-//            $client->getResponse()->headers->contains(
-//                'Allow',
-//                'GET, PUT, DELETE'
-//            )
-//        );
-//
-//        $client->request('GET', '/v1/order');
-//        $storeOrders = json_decode($client->getResponse()->getContent());
-//        $this->assertEquals(count($storeOrders), 1);
-//        $this->assertEquals(2, $storeOrders[0]->id);
-//    }
+
+    /**
+     * DELETE a storeOrder
+     */
+    public function testDeleteStoreOrder()
+    {
+        $this->loadFixtures([
+            'App\Fixture\Test\StoreOrderFixture'
+        ]);
+        $client = $this->makeClient();
+        $client->request(
+            'DELETE',
+            '/v1/order/1',
+            [],
+            [],
+            array('CONTENT_TYPE' => 'application/json'),
+            null
+        );
+        $this->assertStatusCode(204, $client);
+        $this->assertTrue(
+            $client->getResponse()->headers->contains(
+                'Allow',
+                'GET, PUT, DELETE'
+            )
+        );
+
+        $client->request('GET', '/v1/order');
+        $storeOrders = json_decode($client->getResponse()->getContent());
+        $this->assertEquals(count($storeOrders), 1);
+        $this->assertEquals(2, $storeOrders[0]->id);
+    }
 
 
     /**

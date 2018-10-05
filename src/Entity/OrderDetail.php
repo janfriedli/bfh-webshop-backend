@@ -19,7 +19,7 @@ class OrderDetail
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderDetails", cascade={"all"})
+     * @ORM\ManyToOne(targetEntity="App\Entity\Product", inversedBy="orderDetails", cascade={"persist"})
      */
     private $product;
 
