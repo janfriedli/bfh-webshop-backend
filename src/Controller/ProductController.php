@@ -89,6 +89,12 @@ class ProductController extends FOSRestController
      *     description="Creates a new product and return it directly after",
      *      @SWG\Schema(ref=@Model(type=Product::class))
      * )
+     * @SWG\Parameter(
+     * 		name="user",
+     * 		in="body",
+     * 		required=true,
+     * 		@SWG\Schema(ref=@Model(type=Product::class)),
+     * )
      */
     public function postProduct(Product $product, ConstraintViolationListInterface $validationErrors): View
     {
@@ -114,6 +120,12 @@ class ProductController extends FOSRestController
      *     response=200,
      *     description="Updates an existing product",
      *      @SWG\Schema(ref=@Model(type=Product::class))
+     * )
+     * @SWG\Parameter(
+     * 		name="user",
+     * 		in="body",
+     * 		required=true,
+     * 		@SWG\Schema(ref=@Model(type=Product::class)),
      * )
      */
     public function putProduct(int $productId, Product $product, ConstraintViolationListInterface $validationErrors): View
