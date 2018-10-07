@@ -15,7 +15,9 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use App\Exception\ValidationException;
-
+use Nelmio\ApiDocBundle\Annotation\Model;
+use Nelmio\ApiDocBundle\Annotation\Security;
+use Swagger\Annotations as SWG;
 
 class OrderController extends FOSRestController
 {
@@ -39,6 +41,13 @@ class OrderController extends FOSRestController
      * @param int $orderId
      * @return View
      * @throws \Doctrine\ORM\ORMException
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a single Order",
+     *      @SWG\Schema(ref=@Model(type=StoreOrder::class))
+     * )
+     * @SWG\Tag(name="Order")
      */
     public function getOrder(int $orderId): View
     {
@@ -55,6 +64,13 @@ class OrderController extends FOSRestController
      * @Rest\Get("/order")
      * @param Request $request
      * @return View
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a list of Orders",
+     *     @SWG\Schema(ref=@Model(type=StoreOrder::class))
+     * )
+     * @SWG\Tag(name="Order")
      */
     public function orderList(Request $request): View {
         return View::create($this->orderService->getAllOrders(), Response::HTTP_OK);
@@ -67,6 +83,13 @@ class OrderController extends FOSRestController
      * @ParamConverter("order", converter="fos_rest.request_body")
      * @Rest\Post("/order")
      * @return View
+     *
+     * @SWG\Tag(name="Order")
+     * @SWG\Response(
+     *     response=201,
+     *     description="Creates a new Order and returns it directly after",
+     *     @SWG\Schema(ref=@Model(type=StoreOrder::class))
+     * )
      */
     public function postOrder(StoreOrder $order, ConstraintViolationListInterface $validationErrors): View
     {
@@ -86,6 +109,13 @@ class OrderController extends FOSRestController
      * @ParamConverter("order", converter="fos_rest.request_body")
      * @return View
      * @throws \Doctrine\ORM\ORMException
+     *
+     * @SWG\Tag(name="Order")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Updates an existing Order",
+     *      @SWG\Schema(ref=@Model(type=StoreOrder::class))
+     * )
      */
     public function putOrder(int $orderId, StoreOrder $order, ConstraintViolationListInterface $validationErrors): View
     {
@@ -106,7 +136,13 @@ class OrderController extends FOSRestController
      * @Rest\Delete("/order/{orderId}")
      * @param int $orderId
      * @return View
-     * @throws \Doctrine\ORM\ORMException
+     *
+     * @SWG\Tag(name="Order")
+     * @SWG\Response(
+     *     response=204,
+     *     description="Deletes the specified Order",
+     *      @SWG\Schema(ref=@Model(type=StoreOrder::class))
+     * )
      */
     public function deleteOrder(int $orderId): View
     {

@@ -5,12 +5,15 @@
 
 * clone this repo
 * run `composer install`
-* start the dev server `php bin/console server:run
+* start the dev server `php bin/console server:run`
+
+## API Documentation
+You can find the API documentation at `/api/doc`.
+The documentation for production: https://bfh-webshop-backend.herokuapp.com/api/doc
 
 ## CI/CD
 
-The code is automatically tested by Travis Ci.
-CD still has to be set up.
+The code is automatically tested by Travis Ci and will then (if successful) be deployed to Heroku.
 
 ## Testing
 
