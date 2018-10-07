@@ -44,9 +44,10 @@ class ProductController extends FOSRestController
      * @throws \Doctrine\ORM\ORMException
      * @SWG\Response(
      *     response=200,
-     *     description="Returns a product resource",
-     *     @Model(type=App\Entity\Product::class, groups={"non_sensitive_data"})
+     *     description="Returns a single product",
+     *      @SWG\Schema(ref=@Model(type=Product::class))
      * )
+     * @SWG\Tag(name="Product")
      */
     public function getProduct(int $productId): View
     {
@@ -61,10 +62,16 @@ class ProductController extends FOSRestController
     /**
      * Gets the complete product list
      * @Rest\Get("/product")
-     * @param Request $request
      * @return View
+     *
+     * @SWG\Response(
+     *     response=200,
+     *     description="Returns a list of products",
+     *     @SWG\Schema(ref=@Model(type=Product::class))
+     * )
+     * @SWG\Tag(name="Product")
      */
-    public function productList(Request $request): View {
+    public function productList(): View {
         return View::create($this->productService->getAllProducts(), Response::HTTP_OK);
     }
 
@@ -75,7 +82,13 @@ class ProductController extends FOSRestController
      * @ParamConverter("product", converter="fos_rest.request_body")
      * @Rest\Post("/product")
      * @return View
-     * @throws \Doctrine\ORM\ORMException
+     *
+     * @SWG\Tag(name="Product")
+     * @SWG\Response(
+     *     response=201,
+     *     description="Creates a new product and return it directly after",
+     *      @SWG\Schema(ref=@Model(type=Product::class))
+     * )
      */
     public function postProduct(Product $product, ConstraintViolationListInterface $validationErrors): View
     {
@@ -95,6 +108,13 @@ class ProductController extends FOSRestController
      * @ParamConverter("product", converter="fos_rest.request_body")
      * @return View
      * @throws \Doctrine\ORM\ORMException
+     *
+     * @SWG\Tag(name="Product")
+     * @SWG\Response(
+     *     response=200,
+     *     description="Updates an existing product",
+     *      @SWG\Schema(ref=@Model(type=Product::class))
+     * )
      */
     public function putProduct(int $productId, Product $product, ConstraintViolationListInterface $validationErrors): View
     {
@@ -115,7 +135,13 @@ class ProductController extends FOSRestController
      * @Rest\Delete("/product/{productId}")
      * @param int $productId
      * @return View
-     * @throws \Doctrine\ORM\ORMException
+     *
+     * @SWG\Tag(name="Product")
+     * @SWG\Response(
+     *     response=204,
+     *     description="Deletes the specified product",
+     *      @SWG\Schema(ref=@Model(type=Product::class))
+     * )
      */
     public function deleteProduct(int $productId): View
     {
