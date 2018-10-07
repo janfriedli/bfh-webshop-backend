@@ -90,6 +90,12 @@ class OrderController extends FOSRestController
      *     description="Creates a new Order and returns it directly after",
      *     @SWG\Schema(ref=@Model(type=StoreOrder::class))
      * )
+     * @SWG\Parameter(
+     * 		name="Order",
+     * 		in="body",
+     * 		required=true,
+     * 		@SWG\Schema(ref=@Model(type=StoreOrder::class)),
+     * )
      */
     public function postOrder(StoreOrder $order, ConstraintViolationListInterface $validationErrors): View
     {
@@ -115,6 +121,12 @@ class OrderController extends FOSRestController
      *     response=200,
      *     description="Updates an existing Order",
      *      @SWG\Schema(ref=@Model(type=StoreOrder::class))
+     * )
+     * @SWG\Parameter(
+     * 		name="Order",
+     * 		in="body",
+     * 		required=true,
+     * 		@SWG\Schema(ref=@Model(type=StoreOrder::class)),
      * )
      */
     public function putOrder(int $orderId, StoreOrder $order, ConstraintViolationListInterface $validationErrors): View

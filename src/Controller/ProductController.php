@@ -90,7 +90,7 @@ class ProductController extends FOSRestController
      *      @SWG\Schema(ref=@Model(type=Product::class))
      * )
      * @SWG\Parameter(
-     * 		name="user",
+     * 		name="Product",
      * 		in="body",
      * 		required=true,
      * 		@SWG\Schema(ref=@Model(type=Product::class)),
@@ -122,7 +122,7 @@ class ProductController extends FOSRestController
      *      @SWG\Schema(ref=@Model(type=Product::class))
      * )
      * @SWG\Parameter(
-     * 		name="user",
+     * 		name="Product",
      * 		in="body",
      * 		required=true,
      * 		@SWG\Schema(ref=@Model(type=Product::class)),
