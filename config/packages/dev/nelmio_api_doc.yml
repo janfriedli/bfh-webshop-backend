@@ -1,0 +1,8 @@
+nelmio_api_doc:
+  documentation:
+    host: bfh-webshop-backend.herokuapp.com
+    schemes: [https]
+    info:
+      title: BFH Webshop API
+      description: This is the backend for our BFH webshop application
+      version: v0.1.0
