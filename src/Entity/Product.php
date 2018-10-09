@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use JMS\Serializer\Annotation as JMS;
@@ -129,32 +130,26 @@ class Product
         return $this;
     }
 
-    public function getOrderDetail(): ?OrderDetail
-    {
-        return $this->orderDetail;
-    }
-
-    public function setOrderDetail(?OrderDetail $orderDetail): self
-    {
-        $this->orderDetail = $orderDetail;
-
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOrderDetails()
+    public function getOrderDetails(): ArrayCollection
     {
         return $this->orderDetails;
     }
 
-    /**
-     * @param mixed $orderDetails
-     */
-    public function setOrderDetails($orderDetails): void
+    public function setOrderDetails($orderDetails): self
     {
         $this->orderDetails = $orderDetails;
+        return $this;
     }
 
+    public function addOrderDetails(OrderDetail $orderDetail): self
+    {
+        if (!$this->orderDetails) {
+            $this->orderDetails = new ArrayCollection();
+        }
+
+        $this->orderDetails->add($orderDetail);
+
+
+        return $this;
+    }
 }

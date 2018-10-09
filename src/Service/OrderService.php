@@ -61,6 +61,10 @@ final class OrderService
      */
     public function addOrder(StoreOrder $order)
     {
+        foreach ($order->getDetails() as $detail) {
+
+            $detail->setProduct($this->em->merge($detail->getProduct()));
+        }
         $order = $this->crud->save($order);
         return $order;
     }

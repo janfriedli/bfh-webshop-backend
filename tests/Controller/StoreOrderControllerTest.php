@@ -146,9 +146,10 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertFalse($storeOrder->paid);
         $details = $storeOrder->details;
         $this->assertEquals(2, count($details));
-
+        $this->assertEquals(1, $details[0]->product->id);
+        $this->assertEquals(2, $details[1]->product->id);
     }
-//
+
     /**
      * POST a storeOrder with error
      */
