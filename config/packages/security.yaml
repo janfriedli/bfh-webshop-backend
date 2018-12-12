@@ -32,7 +32,7 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
-         - { path: ^/v1/product, roles: ROLE_ADMIN, methods: [POST, UPDATE,PUT, DELETE] }
+         - { path: ^/v1/product, roles: ROLE_ADMIN, methods: [POST, UPDATE, PUT, DELETE] }
          - { path: ^/v1/product, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET]}
          - { path: ^/v1/order, roles: ROLE_ADMIN, methods: [DELETE, GET, UPDATE,  PUT] }
          - { path: ^/v1/order, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST]}

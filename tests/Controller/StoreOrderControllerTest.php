@@ -5,23 +5,38 @@ class StoreOrderControllerTest extends WebTestCase
 {
 
     /**
+     * @var $client \Symfony\Component\BrowserKit\Client client
+     */
+    private $client;
+
+    /**
+     * prepare an auth client
+     */
+    public function setUp()
+    {
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'testuser',
+            'PHP_AUTH_PW'   => 'test',
+        ));
+    }
+
+    /**
      * GET the empty storeOrders
      */
     public function testGetEmptyStoreOrders()
     {
         $this->loadFixtures();
-        $client = $this->makeClient();
-        $client->request('GET', '/v1/order');
-        $this->assertEmpty(json_decode($client->getResponse()->getContent()));
-        $this->assertStatusCode(200, $client);
+        $this->client->request('GET', '/v1/order');
+        $this->assertEmpty(json_decode($this->client->getResponse()->getContent()));
+        $this->assertStatusCode(200, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
@@ -38,23 +53,22 @@ class StoreOrderControllerTest extends WebTestCase
             'App\Fixture\Test\StoreOrderFixture'
         ]);
 
-        $client = $this->makeClient();
-        $client->request('GET', '/v1/order');
-        $storeOrders = json_decode($client->getResponse()->getContent());
+        $this->client->request('GET', '/v1/order');
+        $storeOrders = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(count($storeOrders), 2);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
         );
-        $this->assertStatusCode(200, $client);
+        $this->assertStatusCode(200, $this->client);
 
         foreach ($storeOrders as $key => $storeOrder) {
             $this->assertEquals('CH'.$key, $storeOrder->country);
@@ -82,7 +96,6 @@ class StoreOrderControllerTest extends WebTestCase
             'App\Fixture\Test\StoreOrderFixture'
         ]);
 
-        $client = $this->makeClient();
         $storeOrderJson = '{
             "street": "testStreet",
             "zip": "testZip",
@@ -115,7 +128,7 @@ class StoreOrderControllerTest extends WebTestCase
             ]
         }';
 
-        $client->request(
+        $this->client->request(
             'POST',
             '/v1/order',
             [],
@@ -124,21 +137,21 @@ class StoreOrderControllerTest extends WebTestCase
             $storeOrderJson
         );
 
-        $this->assertStatusCode(201, $client);
+        $this->assertStatusCode(201, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
         );
 
-        $storeOrder = json_decode($client->getResponse()->getContent());
+        $storeOrder = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('CH', $storeOrder->country);
         $this->assertEquals('testName', $storeOrder->fullname);
         $this->assertEquals('testStreet', $storeOrder->street);
@@ -159,27 +172,26 @@ class StoreOrderControllerTest extends WebTestCase
             'App\Fixture\Test\StoreOrderFixture'
         ]);
 
-        $client = $this->makeClient();
         $storeOrderJson = '{
 
         }';
-        $this->postStoreOrder($storeOrderJson, $client);
+        $this->postStoreOrder($storeOrderJson, $this->client);
 
-        $this->assertStatusCode(400, $client);
+        $this->assertStatusCode(400, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
         );
 
-        $error = json_decode($client->getResponse()->getContent());
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(5, count($error));
         $this->assertEquals('street', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
@@ -199,9 +211,9 @@ class StoreOrderControllerTest extends WebTestCase
             "details": []
         }';
 
-        $this->postStoreOrder($storeOrderJson, $client);
-        $this->assertStatusCode(400, $client);
-        $error = json_decode($client->getResponse()->getContent());
+        $this->postStoreOrder($storeOrderJson, $this->client);
+        $this->assertStatusCode(400, $this->client);
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('details', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
     }
@@ -214,7 +226,6 @@ class StoreOrderControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\StoreOrderFixture'
         ]);
-        $client = $this->makeClient();
 
         $storeOrderJson = '{
             "street": "testStreet",
@@ -250,22 +261,22 @@ class StoreOrderControllerTest extends WebTestCase
             ]
         }';
 
-        $this->putStoreOrder(1, $storeOrderJson, $client);
-        $this->assertStatusCode(200, $client);
+        $this->putStoreOrder(1, $storeOrderJson, $this->client);
+        $this->assertStatusCode(200, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, PUT, DELETE'
             )
         );
 
-        $updatedStoreOrder = json_decode($client->getResponse()->getContent());
+        $updatedStoreOrder = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(1, $updatedStoreOrder->id);
         $this->assertEquals('testStreet', $updatedStoreOrder->street);
         $this->assertEquals('testZip', $updatedStoreOrder->zip);
@@ -277,8 +288,8 @@ class StoreOrderControllerTest extends WebTestCase
         $this->assertEquals(4, $updatedStoreOrder->details[1]->product->id);
         $this->assertEquals(55, $updatedStoreOrder->details[1]->quantity);
 
-        $client->request('GET', '/v1/order/1');
-        $storeOrder = json_decode($client->getResponse()->getContent());
+        $this->client->request('GET', '/v1/order/1');
+        $storeOrder = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals($storeOrder->id, $updatedStoreOrder->id);
         $this->assertEquals($storeOrder->street, $updatedStoreOrder->street);
         $this->assertEquals($storeOrder->zip, $updatedStoreOrder->zip);
@@ -299,28 +310,27 @@ class StoreOrderControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\StoreOrderFixture'
         ]);
-        $client = $this->makeClient();
 
         $storeOrderJson = '{
 
         }';
 
-        $this->putStoreOrder(1, $storeOrderJson, $client);
-        $this->assertStatusCode(400, $client);
+        $this->putStoreOrder(1, $storeOrderJson, $this->client);
+        $this->assertStatusCode(400, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, PUT, DELETE'
             )
         );
 
-        $error = json_decode($client->getResponse()->getContent());
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(5, count($error));
         $this->assertEquals('street', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
@@ -342,9 +352,9 @@ class StoreOrderControllerTest extends WebTestCase
             ]
         }';
 
-        $this->postStoreOrder($storeOrderJson, $client);
-        $this->assertStatusCode(400, $client);
-        $error = json_decode($client->getResponse()->getContent());
+        $this->postStoreOrder($storeOrderJson, $this->client);
+        $this->assertStatusCode(400, $this->client);
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals('details', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
     }
@@ -357,8 +367,8 @@ class StoreOrderControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\StoreOrderFixture'
         ]);
-        $client = $this->makeClient();
-        $client->request(
+
+        $this->client->request(
             'DELETE',
             '/v1/order/1',
             [],
@@ -366,18 +376,34 @@ class StoreOrderControllerTest extends WebTestCase
             array('CONTENT_TYPE' => 'application/json'),
             null
         );
-        $this->assertStatusCode(204, $client);
+        $this->assertStatusCode(204, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, PUT, DELETE'
             )
         );
 
-        $client->request('GET', '/v1/order');
-        $storeOrders = json_decode($client->getResponse()->getContent());
+        $this->client->request('GET', '/v1/order');
+        $storeOrders = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(count($storeOrders), 1);
         $this->assertEquals(2, $storeOrders[0]->id);
+    }
+
+    /**
+     * test all pw protected routes
+     */
+    public function test401() {
+        $client = $this->makeClient();
+
+        $client->request('GET', '/v1/order');
+        $this->assertStatusCode(401, $client);
+
+        $client->request('PUT', '/v1/order/1');
+        $this->assertStatusCode(401, $client);
+
+        $client->request('DELETE', '/v1/order/1');
+        $this->assertStatusCode(401, $client);
     }
 
 

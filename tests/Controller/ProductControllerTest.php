@@ -5,6 +5,22 @@ class ProductControllerTest extends WebTestCase
 {
 
     /**
+     * @var $client \Symfony\Component\BrowserKit\Client client
+     */
+    private $client;
+
+    /**
+     * prepare an auth client
+     */
+    public function setUp()
+    {
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'testuser',
+            'PHP_AUTH_PW'   => 'test',
+        ));
+    }
+    
+    /**
      * GET the empty products
      */
     public function testGetEmptyProducts()
@@ -38,18 +54,17 @@ class ProductControllerTest extends WebTestCase
             'App\Fixture\Test\ProductFixture'
         ]);
 
-        $client = $this->makeClient();
-        $client->request('GET', '/v1/product');
-        $products = json_decode($client->getResponse()->getContent());
+        $this->client->request('GET', '/v1/product');
+        $products = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(count($products), 20);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
@@ -62,7 +77,7 @@ class ProductControllerTest extends WebTestCase
             $this->assertEquals($key, $product->quantity);
             $this->assertEquals('https://img.url/test' .$key. '.jpg', $product->img_url);
         }
-        $this->assertStatusCode(200, $client);
+        $this->assertStatusCode(200, $this->client);
     }
 
     /**
@@ -71,7 +86,7 @@ class ProductControllerTest extends WebTestCase
     public function testPostProduct()
     {
         $this->loadFixtures();
-        $client = $this->makeClient();
+
         $productJson = '{
             "title": "testTitle",
             "description": "testDescription",
@@ -80,7 +95,7 @@ class ProductControllerTest extends WebTestCase
             "quantity": 45
         }';
 
-        $client->request(
+        $this->client->request(
             'POST',
             '/v1/product',
             [],
@@ -88,21 +103,21 @@ class ProductControllerTest extends WebTestCase
             array('CONTENT_TYPE' => 'application/json'),
             $productJson
         );
-        $this->assertStatusCode(201, $client);
+        $this->assertStatusCode(201, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
         );
 
-        $product = json_decode($client->getResponse()->getContent());
+        $product = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(1, $product->id);
         $this->assertEquals('testTitle', $product->title);
         $this->assertEquals('testDescription', $product->description);
@@ -117,27 +132,26 @@ class ProductControllerTest extends WebTestCase
     public function testPostProductValidation()
     {
         $this->loadFixtures();
-        $client = $this->makeClient();
         $productJson = '{
             
         }';
-        $this->postProduct($productJson, $client);
+        $this->postProduct($productJson, $this->client);
 
-        $this->assertStatusCode(400, $client);
+        $this->assertStatusCode(400, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, POST'
             )
         );
 
-        $error = json_decode($client->getResponse()->getContent());
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(5, count($error));
         $this->assertEquals('title', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
@@ -150,8 +164,8 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals('quantity', $error[4]->property_path);
         $this->assertEquals('This value should not be blank.', $error[4]->message);
 
-        $this->postProduct('{"img_url": "notARealUrl"}', $client);
-        $error = json_decode($client->getResponse()->getContent());
+        $this->postProduct('{"img_url": "notARealUrl"}', $this->client);
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(5, count($error));
         $this->assertEquals('imgUrl', $error[2]->property_path);
         $this->assertEquals('This value is not a valid URL.', $error[2]->message);
@@ -166,7 +180,6 @@ class ProductControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\ProductFixture'
         ]);
-        $client = $this->makeClient();
 
         $productJson = '{
             "title": "newTitle",
@@ -176,22 +189,22 @@ class ProductControllerTest extends WebTestCase
             "quantity": 45
         }';
 
-        $this->putProduct(1, $productJson, $client);
-        $this->assertStatusCode(200, $client);
+        $this->putProduct(1, $productJson, $this->client);
+        $this->assertStatusCode(200, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, PUT, DELETE'
             )
         );
 
-        $updatedProduct = json_decode($client->getResponse()->getContent());
+        $updatedProduct = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(1, $updatedProduct->id);
         $this->assertEquals('newTitle', $updatedProduct->title);
         $this->assertEquals('newDescription', $updatedProduct->description);
@@ -199,8 +212,8 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals(33, $updatedProduct->price);
         $this->assertEquals(45, $updatedProduct->quantity);
 
-        $client->request('GET', '/v1/product/1');
-        $product = json_decode($client->getResponse()->getContent());
+        $this->client->request('GET', '/v1/product/1');
+        $product = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals($product->id, $updatedProduct->id);
         $this->assertEquals($product->title, $updatedProduct->title);
         $this->assertEquals($product->description, $updatedProduct->description);
@@ -217,28 +230,27 @@ class ProductControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\ProductFixture'
         ]);
-        $client = $this->makeClient();
 
         $productJson = '{
            
         }';
 
-        $this->putProduct(1, $productJson, $client);
-        $this->assertStatusCode(400, $client);
+        $this->putProduct(1, $productJson, $this->client);
+        $this->assertStatusCode(400, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Content-Type',
                 'application/json'
             )
         );
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, PUT, DELETE'
             )
         );
 
-        $error = json_decode($client->getResponse()->getContent());
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(5, count($error));
         $this->assertEquals('title', $error[0]->property_path);
         $this->assertEquals('This value should not be blank.', $error[0]->message);
@@ -251,8 +263,8 @@ class ProductControllerTest extends WebTestCase
         $this->assertEquals('quantity', $error[4]->property_path);
         $this->assertEquals('This value should not be blank.', $error[4]->message);
 
-        $this->postProduct('{"img_url": "notARealUrl"}', $client);
-        $error = json_decode($client->getResponse()->getContent());
+        $this->postProduct('{"img_url": "notARealUrl"}', $this->client);
+        $error = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(5, count($error));
         $this->assertEquals('imgUrl', $error[2]->property_path);
         $this->assertEquals('This value is not a valid URL.', $error[2]->message);
@@ -266,8 +278,7 @@ class ProductControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\ProductFixture'
         ]);
-        $client = $this->makeClient();
-        $client->request(
+        $this->client->request(
             'DELETE',
             '/v1/product/1',
             [],
@@ -275,20 +286,35 @@ class ProductControllerTest extends WebTestCase
             array('CONTENT_TYPE' => 'application/json'),
             null
         );
-        $this->assertStatusCode(204, $client);
+        $this->assertStatusCode(204, $this->client);
         $this->assertTrue(
-            $client->getResponse()->headers->contains(
+            $this->client->getResponse()->headers->contains(
                 'Allow',
                 'GET, PUT, DELETE'
             )
         );
 
-        $client->request('GET', '/v1/product');
-        $products = json_decode($client->getResponse()->getContent());
+        $this->client->request('GET', '/v1/product');
+        $products = json_decode($this->client->getResponse()->getContent());
         $this->assertEquals(count($products), 19);
         $this->assertEquals(2, $products[0]->id);
     }
 
+    /**
+     * test all pw protected routes
+     */
+    public function test401() {
+        $client = $this->makeClient();
+
+        $client->request('POST', '/v1/product');
+        $this->assertStatusCode(401, $client);
+
+        $client->request('PUT', '/v1/product/1');
+        $this->assertStatusCode(401, $client);
+
+        $client->request('DELETE', '/v1/product/1');
+        $this->assertStatusCode(401, $client);
+    }
 
     /**
      * POST a product

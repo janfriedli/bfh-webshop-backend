@@ -1,0 +1,8 @@
+security:
+  providers:
+    in_memory:
+      memory:
+        users:
+          testuser:
+            password: $2a$12$eDkQStJ2UJQcm51dZHZd.Orn0yMNByKqcE32ouYGKkmQlUkZiHzY6
+            roles: 'ROLE_ADMIN'
