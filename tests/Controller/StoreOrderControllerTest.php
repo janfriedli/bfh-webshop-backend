@@ -399,9 +399,6 @@ class StoreOrderControllerTest extends WebTestCase
         $client->request('GET', '/v1/order');
         $this->assertStatusCode(401, $client);
 
-        $client->request('PUT', '/v1/order/1');
-        $this->assertStatusCode(401, $client);
-
         $client->request('DELETE', '/v1/order/1');
         $this->assertStatusCode(401, $client);
     }
