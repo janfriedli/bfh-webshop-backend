@@ -51,7 +51,7 @@ class Product
     private $quantity;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="product")
+     * @ORM\OneToMany(targetEntity="App\Entity\OrderDetail", mappedBy="product", cascade={"detach"})
      * @JMS\Exclude()
      */
     private $orderDetails;
