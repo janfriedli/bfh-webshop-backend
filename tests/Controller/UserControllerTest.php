@@ -40,7 +40,7 @@ class UserControllerTest extends WebTestCase
 
     /**
      * POST wrong register token
-
+     */
 
     public function testWrongToken()
     {
@@ -58,7 +58,7 @@ class UserControllerTest extends WebTestCase
         $this->assertEquals($response["message"],"Wrong register token");
         $this->assertStatusCode(400m, $this->client);
     }
-     */
+
     /**
      * POST duplicated user
 
