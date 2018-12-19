@@ -41,7 +41,6 @@ class UserControllerTest extends WebTestCase
     /**
      * POST wrong register token
      */
-
     public function testWrongToken()
     {
         $this->loadFixtures(); //inits an empty db
@@ -55,13 +54,13 @@ class UserControllerTest extends WebTestCase
             $userJson
         );
         $response = json_decode($this->client->getResponse()->getContent());
-        $this->assertEquals($response["message"],"Wrong register token");
-        $this->assertStatusCode(400m, $this->client);
+        $this->assertEquals($response->message,"Wrong register token");
+        $this->assertStatusCode(400, $this->client);
     }
 
     /**
      * POST duplicated user
-
+     */
     public function testDuplicatedUsername()
     {
         $this->loadFixtures([
@@ -76,8 +75,8 @@ class UserControllerTest extends WebTestCase
             array('CONTENT_TYPE' => 'application/json'),
             $userJson
         );
-        //$this->assertEmpty(json_decode($this->client->getResponse()->getContent()));
+        $response = json_decode($this->client->getResponse()->getContent());
+        $this->assertEquals($response->message,"Username is already taken!");
         $this->assertStatusCode(400, $this->client);
     }
-    */
 }
