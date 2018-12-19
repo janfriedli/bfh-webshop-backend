@@ -25,7 +25,9 @@ class StoreOrderControllerTest extends WebTestCase
      */
     public function testGetEmptyStoreOrders()
     {
-        $this->loadFixtures();
+        $this->loadFixtures([
+            'App\Fixture\Test\UserFixtures'
+        ]);
         $this->client->request('GET', '/v1/order');
         $this->assertEmpty(json_decode($this->client->getResponse()->getContent()));
         $this->assertStatusCode(200, $this->client);
@@ -50,7 +52,8 @@ class StoreOrderControllerTest extends WebTestCase
     public function testGetPopulatedStoreOrders()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\StoreOrderFixture'
+            'App\Fixture\Test\StoreOrderFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $this->client->request('GET', '/v1/order');
@@ -93,7 +96,8 @@ class StoreOrderControllerTest extends WebTestCase
     public function testPostStoreOrder()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\StoreOrderFixture'
+            'App\Fixture\Test\StoreOrderFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $storeOrderJson = '{
@@ -169,7 +173,8 @@ class StoreOrderControllerTest extends WebTestCase
     public function testPostStoreOrderValidation()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\StoreOrderFixture'
+            'App\Fixture\Test\StoreOrderFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $storeOrderJson = '{
@@ -224,7 +229,8 @@ class StoreOrderControllerTest extends WebTestCase
     public function testPutStoreOrder()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\StoreOrderFixture'
+            'App\Fixture\Test\StoreOrderFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $storeOrderJson = '{
@@ -308,7 +314,8 @@ class StoreOrderControllerTest extends WebTestCase
     public function testPutStoreOrderValidation()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\StoreOrderFixture'
+            'App\Fixture\Test\StoreOrderFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $storeOrderJson = '{
@@ -365,7 +372,8 @@ class StoreOrderControllerTest extends WebTestCase
     public function testDeleteStoreOrder()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\StoreOrderFixture'
+            'App\Fixture\Test\StoreOrderFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $this->client->request(

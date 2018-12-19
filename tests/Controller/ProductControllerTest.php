@@ -51,7 +51,8 @@ class ProductControllerTest extends WebTestCase
     public function testGetPopulatedProducts()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\ProductFixture'
+            'App\Fixture\Test\ProductFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $this->client->request('GET', '/v1/product');
@@ -85,7 +86,9 @@ class ProductControllerTest extends WebTestCase
      */
     public function testPostProduct()
     {
-        $this->loadFixtures();
+        $this->loadFixtures([
+            'App\Fixture\Test\UserFixtures'
+        ]);
 
         $productJson = '{
             "title": "testTitle",
@@ -131,7 +134,9 @@ class ProductControllerTest extends WebTestCase
      */
     public function testPostProductValidation()
     {
-        $this->loadFixtures();
+        $this->loadFixtures([
+            'App\Fixture\Test\UserFixtures'
+        ]);
         $productJson = '{
             
         }';
@@ -178,7 +183,8 @@ class ProductControllerTest extends WebTestCase
     public function testPutProduct()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\ProductFixture'
+            'App\Fixture\Test\ProductFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $productJson = '{
@@ -228,7 +234,8 @@ class ProductControllerTest extends WebTestCase
     public function testPutProductValidation()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\ProductFixture'
+            'App\Fixture\Test\ProductFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
 
         $productJson = '{
@@ -276,7 +283,8 @@ class ProductControllerTest extends WebTestCase
     public function testDeleteProduct()
     {
         $this->loadFixtures([
-            'App\Fixture\Test\ProductFixture'
+            'App\Fixture\Test\ProductFixture',
+            'App\Fixture\Test\UserFixtures'
         ]);
         $this->client->request(
             'DELETE',
