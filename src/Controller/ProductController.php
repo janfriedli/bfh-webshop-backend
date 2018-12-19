@@ -158,6 +158,6 @@ class ProductController extends FOSRestController
     public function deleteProduct(int $productId): View
     {
         $this->productService->deleteProduct($productId);
-        return View::create([], Response::HTTP_NO_CONTENT);
+        return View::create(null, Response::HTTP_NO_CONTENT);
     }
 }

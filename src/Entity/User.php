@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
+use JMS\Serializer\Annotation\Type;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -28,6 +29,13 @@ class User implements UserInterface
     private $roles = [];
 
     /**
+     * not stored
+     * @var string
+     * @Type("string")
+     */
+    private $registerToken;
+
+    /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
@@ -36,6 +44,22 @@ class User implements UserInterface
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getRegisterToken()
+    {
+        return $this->registerToken;
+    }
+
+    /**
+     * @param mixed $registerToken
+     */
+    public function setRegisterToken($registerToken): void
+    {
+        $this->registerToken = $registerToken;
     }
 
     /**

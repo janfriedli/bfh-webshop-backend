@@ -34,3 +34,4 @@ security:
          - { path: ^/v1/product, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [GET]}
          - { path: ^/v1/order, roles: ROLE_ADMIN, methods: [DELETE, GET, UPDATE] }
          - { path: ^/v1/order, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST. PUT]}
+         - { path: ^/v1/register, roles: IS_AUTHENTICATED_ANONYMOUSLY, methods: [POST]}
