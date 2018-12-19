@@ -36,6 +36,14 @@ class UserControllerTest extends WebTestCase
         $response = json_decode($this->client->getResponse()->getContent());
         $this->assertEmpty($response);
         $this->assertStatusCode(201, $this->client);
+
+        $this->client = static::createClient(array(), array(
+            'PHP_AUTH_USER' => 'test12345',
+            'PHP_AUTH_PW'   => 'TEST123456',
+        ));
+
+        $this->client->request('GET', '/v1/order');
+        $this->assertStatusCode(200, $this->client);
     }
 
     /**
