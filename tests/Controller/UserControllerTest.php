@@ -24,7 +24,7 @@ class UserControllerTest extends WebTestCase
     {
 
         $this->loadFixtures(); //inits an empty db
-        $userJson = '{ "username" : "test", "password" : "TEST", "register_token" : "secret"} ';
+        $userJson = '{ "username" : "test12345", "password" : "TEST123456", "register_token" : "secret"} ';
         $this->client->request(
             'POST',
             '/v1/register',
@@ -44,7 +44,7 @@ class UserControllerTest extends WebTestCase
     public function testWrongToken()
     {
         $this->loadFixtures(); //inits an empty db
-        $userJson = '{ "username" : "test", "password" : "TEST", "register_token" : "secret1"} ';
+        $userJson = '{ "username" : "test12345", "password" : "TEST123456", "register_token" : "secret1"} ';
         $this->client->request(
             'POST',
             '/v1/register',
@@ -66,7 +66,7 @@ class UserControllerTest extends WebTestCase
         $this->loadFixtures([
             'App\Fixture\Test\UserFixtures'
         ]); //inits an empty db
-        $userJson = '{ "username" : "testuser", "password" : "TEST", "register_token" : "secret"} ';
+        $userJson = '{ "username" : "testuser", "password" : "TEST123456", "register_token" : "secret"} ';
         $this->client->request(
             'POST',
             '/v1/register',
