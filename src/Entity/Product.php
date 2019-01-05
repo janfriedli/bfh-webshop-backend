@@ -9,6 +9,7 @@ use JMS\Serializer\Annotation as JMS;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProductRepository")
+ * @ORM\HasLifecycleCallbacks()
  */
 class Product
 {
@@ -151,5 +152,14 @@ class Product
 
 
         return $this;
+    }
+
+    /**
+     * escape img Url
+     * @ORM\PrePersist
+     */
+    public function escapeImgUrl()
+    {
+        $this->imgUrl = htmlspecialchars($this->getImgUrl());
     }
 }
