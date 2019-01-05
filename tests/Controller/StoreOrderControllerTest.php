@@ -248,7 +248,7 @@ class StoreOrderControllerTest extends WebTestCase
                         "description": "description2",
                         "img_url": "https://img.url/test2.jpg",
                         "price": 2,
-                        "quantity": 0
+                        "quantity": 3
                     },
                     "quantity": 3
                 },
@@ -260,7 +260,7 @@ class StoreOrderControllerTest extends WebTestCase
                         "description": "description5",
                         "img_url": "https://img.url/test5.jpg",
                         "price": 5,
-                        "quantity": 0
+                        "quantity": 55
                     },
                     "quantity": 55
                 }

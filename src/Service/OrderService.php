@@ -81,6 +81,10 @@ final class OrderService
             return null;
         }
 
+        if ($updatedOrder->getPaid()) {
+            $this->subtractProductQuantity($updatedOrder);
+        }
+
         return $this->crud->update($orderId, $updatedOrder);
     }
 
@@ -92,6 +96,24 @@ final class OrderService
         $order = $this->orderRepository->findOneById($orderId);
         if ($order) {
             $this->crud->delete($order);
+        }
+    }
+
+    /**
+     * @param StoreOrder $order
+     */
+    private function subtractProductQuantity(StoreOrder $order) {
+        foreach ($order->getDetails() as $detail) {
+            $product = $detail->getProduct();
+            if ($detail->getQuantity() <= $product->getQuantity()) {
+                $product->setQuantity($product->getQuantity() - $detail->getQuantity());
+                $this->crud->update($product->getId(),$product);
+            } else {
+                throw new BadRequestHttpException(
+                    "Only " . $product->getQuantity() . " of " . $product->getTitle() . " available"
+                );
+            }
+
         }
     }
 }
